@@ -1,5 +1,6 @@
 import urllib.request
 import sys
+from pyfiglet import figlet_format
 
 def wp_check(url):
     url_wpl = url + "/wp-login.php"
@@ -37,6 +38,7 @@ def url_check(url):
 
 
 def main():
+    print(figlet_format('wpdetect'))
     try:
         if sys.argv[1] == '-h' or sys.argv[1] == '--help':
             print("Syntax: wpdetect <website-url>")

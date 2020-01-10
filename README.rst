@@ -9,7 +9,7 @@ or issues.
 Installation
 ~~~~~~~~~~~~
 
-You can install wpdetect using,
+You can install wpdetect using pip,
 
 .. code:: sh
 
@@ -17,3 +17,19 @@ You can install wpdetect using,
 
 wpdetect requires Python 3 or above to run. If you have Python 2
 installed too, make sure to use the right pip.
+
+Usage
+~~~~~
+
+Syntax
+
+.. code:: sh
+
+	wpdetect <website_url>
+
+Example
+
+.. code:: sh
+	wpdetect https://iamlizu.com/
+
+Please note that, it is not always possible to detect the presence of WordPress, website admins can take extra measures to remove sign of WordPress.
