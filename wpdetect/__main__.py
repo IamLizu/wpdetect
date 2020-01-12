@@ -4,15 +4,15 @@ from pyfiglet import figlet_format
 
 def wp_check(url):
     url_wpl = url + "/wp-login.php"
+    url_wpad = url + "/wp-admin/"
     url_wpc = url + "/wp-cron.php"
     url_wpx = url + "/xmlrpc.php"
-    url_wpr = url + "/readme.html"
     url_wpa = url + "/wp-json/wp/v2/"
     try:
-        if urllib.request.urlopen(url_wpr) or urllib.request.urlopen(url_wpl) or urllib.request.urlopen(url_wpc) or urllib.request.urlopen(url_wpx) or urllib.request.urlopen(url_wpa):
-            print("Good news, website is using WordPress!")
+    	if urllib.request.urlopen(url_wpad) or urllib.request.urlopen(url_wpl) or urllib.request.urlopen(url_wpc) or urllib.request.urlopen(url_wpx) or urllib.request.urlopen(url_wpa):
+    		print("Good news, website is using WordPress!")
     except urllib.error.URLError:
-            print(sys.argv[1] + " is not using WordPress!")
+    	print("Website is not using WordPress!")
     print("\nPlease be informed we can not always guarantee the result.")
     print("If you have any suggestions, please email thegeek@iamlizu.com.")
 

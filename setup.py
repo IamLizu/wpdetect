@@ -6,7 +6,7 @@ with open(path.join(this_directory, 'README.rst'), encoding='utf-8') as f:
 setup(
   name = 'wpdetect',
   packages = ['wpdetect'],
-  version = '1.1',
+  version = '1.2',
   license='MIT',
   description = 'A WordPress detection tool, detects if a website is running WordPress',
   long_description=long_description,
@@ -14,7 +14,7 @@ setup(
   author = 'S M Mahmudul Hasan',
   author_email = 'thegeek@iamlizu.com',
   url = 'https://iamlizu.com/tools/wpdetect/',
-  download_url = 'https://github.com/IamLizu/wpdetect/archive/v_1_1.tar.gz',
+  download_url = 'https://github.com/IamLizu/wpdetect/archive/v_1_2.tar.gz',
   keywords = ['WordPress', 'Detect', 'wpdetect'],
   install_requires=[
           'pyfiglet',
