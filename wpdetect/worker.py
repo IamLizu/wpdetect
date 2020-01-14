@@ -10,75 +10,63 @@ def wp_check(url):
     url_wpc = url + "/wp-cron.php"
     url_wpx = url + "/xmlrpc.php"
     url_wpa = url + "/wp-json/wp/v2/"
-    url_wpact = url + "/wp-content/themes/"
-    url_wpacp = url + "/wp-content/plugins/"
 
     req_wpl = urllib.request.Request(url_wpl, headers={'User-Agent': header})
     req_wpac = urllib.request.Request(url_wpac, headers={'User-Agent': header})
-    req_wpact = urllib.request.Request(url_wpact, headers={'User-Agent': header})
-    req_wpacp = urllib.request.Request(url_wpact, headers={'User-Agent': header})
     req_wpad = urllib.request.Request(url_wpad, headers={'User-Agent': header})
     req_wpc = urllib.request.Request(url_wpc, headers={'User-Agent': header})
     req_wpx = urllib.request.Request(url_wpx, headers={'User-Agent': header})
     req_wpa = urllib.request.Request(url_wpa, headers={'User-Agent': header})
 
     try:
-    	print("\n[+] Checking ./")
-    	if urllib.request.urlopen(req_wpact):
-    		print("\nGood news, website is using WordPress!")
-    		sys.exit()
-    except urllib.error.HTTPError:
-    	pass
-    try:
-    	print("[+] Checking ../")
-    	if urllib.request.urlopen(req_wpad):
-    		print("\nGood news, website is using WordPress!")
-    		sys.exit()
-    except urllib.error.HTTPError:
-    	pass
-    try:
-    	print("[+] Checking .../")
-    	if urllib.request.urlopen(req_wpac):
-    		print("\nGood news, website is using WordPress!")
-    		sys.exit()
-    except urllib.error.HTTPError:
-    	pass
-    try:
-    	print("[+] Checking ..../")
-    	if urllib.request.urlopen(req_wpacp):
-    		print("\nGood news, website is using WordPress!")
-    		sys.exit()
-    except urllib.error.HTTPError:
-    	pass
-    try:
-    	print("[+] Checking ...../")
-    	if urllib.request.urlopen(req_wpl):
-    		print("\nGood news, website is using WordPress!")
-    		sys.exit()
-    except urllib.error.HTTPError:
-    	pass
-    try:
-        print("[+] Checking ....../")
-        if urllib.request.urlopen(req_wpx):
+        print("\n[+] Checking ./")
+        print(req_wpad.full_url)
+        if urllib.request.urlopen(req_wpad):
             print("\nGood news, website is using WordPress!")
             sys.exit()
     except urllib.error.HTTPError:
         pass
     try:
-        print("[+] Checking ......./")
+        print("[+] Checking ../")
+        print(req_wpac.full_url)
+        if urllib.request.urlopen(req_wpac):
+            print("\nGood news, website is using WordPress!")
+            sys.exit()
+    except urllib.error.HTTPError:
+        pass
+    try:
+        print("[+] Checking .../")
+        print(req_wpl.full_url)
+        if urllib.request.urlopen(req_wpl):
+            print("\nGood news, website is using WordPress!")
+            sys.exit()
+    except urllib.error.HTTPError:
+        pass
+    try:
+        print("[+] Checking ..../")
+        print(req_wpc.full_url)
         if urllib.request.urlopen(req_wpc):
             print("\nGood news, website is using WordPress!")
             sys.exit()
     except urllib.error.HTTPError:
         pass
     try:
-    	print("[+] Checking ......../")
-    	if urllib.request.urlopen(req_wpa):
-    		print("\nGood news, website is using WordPress!")
-    		sys.exit()
+        print("[+] Checking ...../")
+        print(req_wpx.full_url)
+        if urllib.request.urlopen(req_wpx):
+            print("\nGood news, website is using WordPress!")
+            sys.exit()
     except urllib.error.HTTPError:
-    	print("\nWebsite may not be using WordPress.")
-    	sys.exit()
+        pass
+    try:
+        print("[+] Checking ....../")
+        print(req_wpa.full_url)
+        if urllib.request.urlopen(req_wpa):
+            print("\nGood news, website is using WordPress!")
+            sys.exit()
+    except urllib.error.HTTPError:
+        print("\nWebsite may not be using WordPress.")
+        sys.exit()
 
 
 def url_check(url):
