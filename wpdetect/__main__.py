@@ -4,6 +4,7 @@ from pyfiglet import figlet_format
 
 
 def wp_check(url):
+    header = "'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'"
     url_wpl = url + "/wp-login.php"
     url_wpac = url + "/wp-content/"
     url_wpad = url + "/wp-admin/"
@@ -82,6 +83,7 @@ def wp_check(url):
 
 
 def url_check(url):
+    header = "'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'"
     try:
         if url[:4] != "http":
             print("[!] No protocol specified.")
@@ -122,11 +124,11 @@ def main():
             print("Example: wpdetect https://iamlizu.com/")
             sys.exit()
         if sys.argv[1] == '-v' or sys.argv[1] == '--version':
-        	print("Version: 1.3.2")
+        	print("Version: 1.3.3")
         	sys.exit()
         url = sys.argv[1]
         print(figlet_format('     wpdetect     '))
-        print("=================== version: 1.3.2 ===================\n")
+        print("=================== version: 1.3.3 ===================\n")
         url_check(url)
     except IndexError:
         print("You didn't enter anything! Please try agian, make sure to enter a valid url.")
@@ -137,5 +139,4 @@ def main():
 
 
 if __name__ == '__main__':
-	header = "'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'"
 	main()

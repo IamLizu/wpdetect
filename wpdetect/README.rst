@@ -35,6 +35,6 @@ Example
 
 Please note that, it is not always possible to detect the presence of WordPress, website admins can take extra measures to remove sign of WordPress.
 
-What's new in version 1.3.2
+What's new in version 1.3.3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * Minor bug fixes.
