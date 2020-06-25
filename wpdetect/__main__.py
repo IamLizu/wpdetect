@@ -108,10 +108,10 @@ def main():
             print("Example: wpdetect https://iamlizu.com/")
             sys.exit()
         if sys.argv[1] == '-v' or sys.argv[1] == '--version':
-        	print("Version: 1.3.3")
+        	print("Version: 1.3.5")
         	sys.exit()
         print(figlet_format('     wpdetect     '))
-        print("=================== version: 1.3.4 ===================\n")
+        print("=================== version: 1.3.5 ===================\n")
         if sys.argv[1] == '-f' or sys.argv[1] == '--file':
             if len(sys.argv) > 2:
                 file = open(sys.argv[2], 'r')
