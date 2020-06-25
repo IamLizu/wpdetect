@@ -33,8 +33,22 @@ Example
 
         wpdetect https://iamlizu.com/
 
+Or feed a text file with a list of domains, each domain should be separated with new lines.
+
+.. code:: sh
+
+        wpdetect -f sites.txt
+
+Where `sites.txt` will contain domains like this,
+
+.. code:: txt
+
+       https://iamlizu.com/
+       https://www.newyorker.com/
+       http://www.techcrunch.com/
+
 Please note that, it is not always possible to detect the presence of WordPress, website admins can take extra measures to remove sign of WordPress.
 
-What's new in version 1.3.3
+What's new in version 1.3.4
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-* Minor bug fixes.
+* Check with a list of domains 

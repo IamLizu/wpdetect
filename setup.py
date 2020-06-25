@@ -6,7 +6,7 @@ with open(path.join(this_directory, 'README.rst'), encoding='utf-8') as f:
 setup(
   name = 'wpdetect',
   packages = ['wpdetect'],
-  version = '1.3.3',
+  version = '1.3.4',
   license='MIT',
   description = 'A WordPress detection tool, detects if a website is running WordPress',
   long_description=long_description,
