@@ -108,10 +108,10 @@ def main():
             print("Example: wpdetect https://iamlizu.com/")
             sys.exit()
         if sys.argv[1] == '-v' or sys.argv[1] == '--version':
-        	print("Version: 1.3.5")
+        	print("Version: 1.3.6")
         	sys.exit()
         print(figlet_format('     wpdetect     '))
-        print("=================== version: 1.3.5 ===================\n")
+        print("=================== version: 1.3.6 ===================\n")
         if sys.argv[1] == '-f' or sys.argv[1] == '--file':
             if len(sys.argv) > 2:
                 file = open(sys.argv[2], 'r')
@@ -127,13 +127,16 @@ def main():
                     print("Found WordPress installation in.../")
                     for domain in wp_domains:
                         print(domain)
+                elif len(wp_domains) == 0:
+                    print("No WordPress installation found!")
                 sys.exit()
         url = sys.argv[1]
         url_check(url)
     except IndexError:
         print("You didn't enter anything! Please try agian, make sure to enter a valid url.")
-        print("Syntax: wpdetect <website-url>")
         print("Example: wpdetect https://iamlizu.com/")
+        print("or supply a list with '-f' flag")
+        print("Example: wpdetect -f domainlist.txt")
     except KeyboardInterrupt:
     	print("\nAborted by user.")
 
