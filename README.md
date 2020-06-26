@@ -29,5 +29,5 @@ http://www.techcrunch.com/
 
 Please note that, it is not always possible to detect the presence of WordPress, website admins can take extra measures to remove sign of WordPress.
 
-### What's new in version 1.3.5
-* Check with a list of domains
+### What's new in version 1.3.6
+* Fixed minor bugs
