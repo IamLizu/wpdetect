@@ -1,6 +1,6 @@
 import urllib.request
 import sys
-from pyfiglet import figlet_format
+import threading
 
 wp_domains = []
 header = "'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'"
@@ -45,17 +45,7 @@ def url_check(url):
         if e.code == 403:
             pass
     except urllib.error.URLError:
-        if url[:5] == "https":
-            #print("[!] Couldn't connect over HTTPS.")
-            #print("[+] Trying with HTTP.\n")
-            url = "http://" + url[8:]
-            #print("Checking: " + str(url))
-            try:
-                url_check(url)
-            except urllib.error.URLError:
-                pass
-        else:
-            pass
+        pass
     except ValueError:
         pass
 
@@ -77,8 +67,15 @@ def main():
                 sys.exit()
         
         if not sys.stdin.isatty():
+            urls = []
             for line in sys.stdin:
-                url_check(line.strip())
+                urls.append(line.strip())
+            threads = [threading.Thread(target=url_check, args=(url,)) for url in urls]
+            for thread in threads:
+                thread.start()
+            for thread in threads:
+                thread.join()
+            sys.exit()
         elif sys.argv[1] == '-f' or sys.argv[1] == '--file':
             try:
                 if len(sys.argv) > 2:
