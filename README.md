@@ -3,12 +3,23 @@ A WordPress detection tool, detects if a website is running WordPress. wpdetect 
 ### Installation
 You can install wpdetect using pip,
 ```sh
-pip install wpdetect
+git clone repository_url
+sudo python setup.py install
 ```
 wpdetect requires Python 3 or above to run. If you have Python 2 installed too, make sure to use the right pip.
 
 ### Usage
 Syntax
+
+```sh
+cat URLs.txt | wpdetect
+```
+
+```sh
+echo https://hackerone.com | wpdetect
+```
+
+
 ```sh
 wpdetect <website_url>
 ```
