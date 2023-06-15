@@ -44,6 +44,8 @@ Please note that, it is not always possible to detect the presence of WordPress,
 * Fixed minor bugs
 
 
+# DEV-Notes (Development mind map)
+
 ### To implement
 1. Use 1000 requests per thread
 2. Each request should be sent in an asynchronous way
