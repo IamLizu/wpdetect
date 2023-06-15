@@ -80,3 +80,6 @@ Some additional optimisations
 
 Remove duplications from the targets container to avoid sending multiple requests to the same URL
 
+Create test scripts
+--------------------
+
