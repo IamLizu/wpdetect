@@ -42,3 +42,9 @@ Please note that, it is not always possible to detect the presence of WordPress,
 
 ### What's new in version 1.3.6
 * Fixed minor bugs
+
+
+### To implement
+1. Use 1000 requests per thread
+2. Each thread should work in a concurrent way
+3. Implement two methods: i. Fast (Some false positives but blazingly fast) ii. Slow (Highly accurate but slow)
