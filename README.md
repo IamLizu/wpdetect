@@ -46,5 +46,37 @@ Please note that, it is not always possible to detect the presence of WordPress,
 
 ### To implement
 1. Use 1000 requests per thread
-2. Each thread should work in a concurrent way
+2. Each request should be sent in an asynchronous way
 3. Implement two methods: i. Fast (Some false positives but blazingly fast) ii. Slow (Highly accurate but slow)
+
+
+Fast mode (default)
+-------------
+
+i. Will send 1 request and analyse it for wordpress patterns
+
+Slow mode
+------------
+
+ii. Will send multiple requests and analyse it for wordpress patterns
+
+User interface design 
+-----------------------
+-slow option should trigger the scans in slow mode
+-t option should specift the number of threads
+
+Input options
+--------------
+
+Three methods to supply input:
+1. File
+2. Standard input
+3. Command line argument
+
+If all of the input contains values then combine the target from all the sources
+
+Some additional optimisations
+-------------------------------
+
+Sort the input to avoid sending multiple requests to the same URL
+
