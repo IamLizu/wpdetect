@@ -73,10 +73,10 @@ Three methods to supply input:
 2. Standard input
 3. Command line argument
 
-If all of the input contains values then combine the target from all the sources
+If all of the input methods contains values then combine the targets from all the sources instead of priotizing one and ignoring other
 
 Some additional optimisations
 -------------------------------
 
-Sort the input to avoid sending multiple requests to the same URL
+Remove duplications from the targets container to avoid sending multiple requests to the same URL
 
