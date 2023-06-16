@@ -76,7 +76,7 @@ def import_targets(arrayOfTargets, singleTarget, fileName):
 @click.option("--url", help="Url that you want to scan", default="")
 @click.option("--file", help="File to import URLs from", default="")
 @click.option("--targets", default=sys.stdin, type=click.File('r'))
-@click.option("--threads", default=10, help="Number of threads")
+@click.option("--threads", default=1, help="Number of threads")
 @click.option("--timeout", default=5, help="HTTP Timeout in seconds")
 def scan(url, mode, file, targets, threads, timeout):
     if sys.stdin.isatty() == False: # if targets are passed via the standard input
