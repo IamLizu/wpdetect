@@ -1,10 +1,20 @@
 import click
 import sys
 import os
-import helpers
+import validators
 import threading
 import urllib.request
 from urllib.parse import urlparse
+
+
+
+def isUrl(string):
+    return validators.url(string)
+
+def splitArray(array, n):
+    final = [array[i * n:(i + 1) * n] for i in range((len(array) + n - 1) // n )]
+    return final
+
 
 
 def wp_check(url): # this function is defined to support the implementation of previous version of the tool
@@ -67,7 +77,7 @@ def import_targets(arrayOfTargets, singleTarget, fileName):
                 if line.strip() != "":
                     targets.append(line.strip())
 
-    targets = list(filter(helpers.isUrl, targets))
+    targets = list(filter(isUrl, targets))
     return targets
 
 
@@ -78,13 +88,12 @@ def import_targets(arrayOfTargets, singleTarget, fileName):
 @click.option("--targets", default=sys.stdin, type=click.File('r'))
 @click.option("--threads", default=1, help="Number of threads")
 @click.option("--timeout", default=5, help="HTTP Timeout in seconds")
-def scan(url, mode, file, targets, threads, timeout):
+def main(url, mode, file, targets, threads, timeout):
     if sys.stdin.isatty() == False: # if targets are passed via the standard input
         with targets:
             stdinTargets = targets.read().split("\n")
             targets = import_targets(stdinTargets, url, file)
-            targetsArray = helpers.splitArray(targets, threads)
-            allThreads = []
+            targetsArray = splitArray(targets, threads)
             for t in targetsArray:
                 thread = threading.Thread(target=isWordpress, args=[t, mode, timeout])
                 thread.start()
@@ -92,13 +101,11 @@ def scan(url, mode, file, targets, threads, timeout):
             
     else: # if standard input is empty
         targets = import_targets([], url, file)
-        targetsArray = helpers.splitArray(targets, threads)
-        allThreads = []
+        targetsArray = splitArray(targets, threads)
         for t in targetsArray:
             thread = threading.Thread(target=isWordpress, args=[t, mode, timeout])
             thread.start()
         #isWordpress(targets, mode)
 
 if __name__ == "__main__":
-    
-    scan()
+    main()
