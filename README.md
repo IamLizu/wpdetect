@@ -3,13 +3,18 @@ A WordPress detection tool, detects if a website is running WordPress. wpdetect 
 ### Installation
 You can install wpdetect using pip,
 ```sh
-git clone https://github.com/serialfuzzer/wpdetect.git
-sudo python setup.py install
+pip install wpdetect
 ```
 wpdetect requires Python 3 or above to run. If you have Python 2 installed too, make sure to use the right pip.
 
 ### Usage
 Syntax
+
+
+```sh
+wpdetect --url https://iamlizu.com/
+```
+
 
 ```sh
 cat URLs.txt | wpdetect
@@ -21,30 +26,23 @@ echo https://hackerone.com | wpdetect
 
 
 ```sh
-wpdetect <website_url>
+wpdetect --file urls.txt
 ```
-Example
-```sh
-wpdetect https://iamlizu.com/
-```
-Or feed a text file with a list of domains, each domain should be separated with new lines.
-```sh
-wpdetect -f sites.txt
-```
-Where `sites.txt` will contain domains like this,
+
+
+Where `urls.txt` will contain domains like this,
 ```sh
 https://iamlizu.com/
 https://www.newyorker.com/
 http://www.techcrunch.com/
 ```
 
+
 Please note that, it is not always possible to detect the presence of WordPress, website admins can take extra measures to remove sign of WordPress.
 
-### What's new in version 1.3.6
-* Fixed minor bugs
-
-
-### To implement
-1. Use 1000 requests per thread
-2. Each thread should work in a concurrent way
-3. Implement two methods: i. Fast (Some false positives but blazingly fast) ii. Slow (Highly accurate but slow)
+| Option | Description | Default Vaue |
+|--------|-------------|--------------|
+| --file | Path of the file containing URLs separated by new line characters    | Empty String |
+|  --url | URL of the target         |              |
+|--threads| Number of threads|1|
+|--timeout| Timeout of the HTTP request in seconds | 5 |
