@@ -1,11 +1,22 @@
 # WP DETECT
 A WordPress detection tool, detects if a website is running WordPress. wpdetect is a great tool when you just want to check WordPress' presence but do not want to scan the site for vulnerabilities or issues.  
 ### Installation
+
+#### Installing from pip
 You can install wpdetect using pip,
 ```sh
 pip install wpdetect
 ```
 wpdetect requires Python 3 or above to run. If you have Python 2 installed too, make sure to use the right pip.
+
+#### Installing locally
+
+```sh
+git clone https://github.com/serialfuzzer/wpdetect.git
+cd wpdetect
+python setup.py install
+```
+
 
 ### Usage
 Syntax
