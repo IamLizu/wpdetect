@@ -40,6 +40,8 @@ http://www.techcrunch.com/
 
 Please note that, it is not always possible to detect the presence of WordPress, website admins can take extra measures to remove sign of WordPress.
 
+## Options
+
 | Option | Description | Default Vaue |
 |--------|-------------|--------------|
 | --file | Path of the file containing URLs separated by new line characters    | Empty String |
