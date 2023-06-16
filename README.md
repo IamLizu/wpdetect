@@ -50,6 +50,7 @@ Please note that, it is not always possible to detect the presence of WordPress,
 1. Use 1000 requests per thread
 2. Each request should be sent in an asynchronous way
 3. Implement two methods: i. Fast (Some false positives but blazingly fast) ii. Slow (Highly accurate but slow)
+4. Combine URLs from standard input, CLI argument and file into a single array, also filter out the incorrect URLs (completed, will push later) ✅
 
 
 Fast mode (default)
