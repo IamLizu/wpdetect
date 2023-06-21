@@ -9,21 +9,13 @@ pip install wpdetect
 ```
 wpdetect requires Python 3 or above to run. If you have Python 2 installed too, make sure to use the right pip.
 
-#### Installing locally
-
-```sh
-git clone https://github.com/serialfuzzer/wpdetect.git
-cd wpdetect
-python setup.py install
-```
-
 
 ### Usage
 Syntax
 
 
 ```sh
-wpdetect --url https://iamlizu.com/
+wpdetect --url https://www.malcare.com/
 ```
 
 
@@ -43,7 +35,7 @@ wpdetect --file urls.txt
 
 Where `urls.txt` will contain domains like this,
 ```sh
-https://iamlizu.com/
+https://www.malcare.com/
 https://www.newyorker.com/
 http://www.techcrunch.com/
 ```
@@ -59,3 +51,6 @@ Please note that, it is not always possible to detect the presence of WordPress,
 |  --url | URL of the target         |              |
 |--threads| Number of threads|1|
 |--timeout| Timeout of the HTTP request in seconds | 5 |
+
+## Upcoming features
+1. **Asynchronous**: We're designing the tool to work in an asynchronous way, this means that there will be further improvements in speed.
