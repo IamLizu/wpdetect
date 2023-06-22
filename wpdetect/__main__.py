@@ -1,154 +1,182 @@
-import urllib.request
+import click
 import sys
+import os
+import validators
+import threading
+import urllib.request
+from urllib.parse import urlparse
 from pyfiglet import figlet_format
 
-wp_domains = []
-header = "'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'"
-def wp_check(url):
-    url_wpl = url + "/wp-login.php"
-    url_wpac = url + "/wp-content/"
-    url_wpad = url + "/wp-admin/"
-    url_wpc = url + "/wp-cron.php"
-    url_wpx = url + "/xmlrpc.php"
-    url_wpa = url + "/wp-json/wp/v2/"
-    url_wpact = url + "/wp-content/themes/"
+banner=figlet_format('     wpdetect     ')
+UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A"
 
-    req_wpl = urllib.request.Request(url_wpl, headers={'User-Agent': header})
-    req_wpac = urllib.request.Request(url_wpac, headers={'User-Agent': header})
-    req_wpact = urllib.request.Request(url_wpact, headers={'User-Agent': header})
-    req_wpacp = urllib.request.Request(url_wpact, headers={'User-Agent': header})
-    req_wpad = urllib.request.Request(url_wpad, headers={'User-Agent': header})
-    req_wpc = urllib.request.Request(url_wpc, headers={'User-Agent': header})
-    req_wpx = urllib.request.Request(url_wpx, headers={'User-Agent': header})
-    req_wpa = urllib.request.Request(url_wpa, headers={'User-Agent': header})
 
-    print("Please wait.../")
+cliOptions = {
+    "silent": False,
+    "preferHttps": False,
+    "preferHttp": False
+}
+
+
+def notSilentMode():
+    return cliOptions["silent"] == False
+
+def output(str):
+    if notSilentMode():
+        print(str)
+
+
+def isUrl(string):
+    return validators.url(string)
+
+def splitArray(array, n):
+    if n != 1:
+        final = [array[i * n:(i + 1) * n] for i in range((len(array) + n - 1) // n )]
+        return final
+    else:
+        return [array]
+
+def checkProtocol(url):
+    if url[:6] == 'https:':
+        return True
+    elif url[:5] == 'http:':
+        return True
+    else:
+        return False
+
+def wp_check(url): # this function is defined to support the implementation of previous version of the tool
     try:
-        if urllib.request.urlopen(req_wpa):
-            print("\nGood news, " + str(url) + " is using WordPress!\n")
-            wp_domains.append(url)
-    except urllib.error.HTTPError:
-        try:
-            if urllib.request.urlopen(req_wpl):
-                print("\nGood news, " + str(url) + " is using WordPress!\n")
-                wp_domains.append(url)
-        except urllib.error.HTTPError:
-            try:
-                if urllib.request.urlopen(req_wpac):
-                    print("\nGood news, " + str(url) + " is using WordPress!\n")
-                    wp_domains.append(url)
-            except urllib.error.HTTPError:
+        isWp = False
+        checks = ['wp-content', 'wp-includes', 'wp-json']
+        hostname = urlparse(url).netloc
+        request = urllib.request.Request(url, headers={'User-Agent': UserAgent})
+        response = urllib.request.urlopen(request).read().decode()
+        for check in checks:
+            checkStr = hostname + "/" + check
+            if checkStr in response:
+                isWp=True
+        return isWp
+    except:
+        return False
+
+
+
+
+def isWordpress(urls, mode, timeOut):
+    try:
+        if mode == "fast":
+            checks = ['wp-content', 'wp-includes', 'wp-json']
+            for url in urls:
                 try:
-                    if urllib.request.urlopen(req_wpact):
-                        print("\nGood news, " + str(url) + " is using WordPress!\n")
-                        wp_domains.append(url)
-                except urllib.error.HTTPError:
-                    try:
-                        if urllib.request.urlopen(req_wpacp):
-                            print("\nGood news, " + str(url) + " is using WordPress!\n")
-                            wp_domains.append(url)
-                    except urllib.error.HTTPError:
-                        try:
-                            if urllib.request.urlopen(req_wpad):
-                                print("\nGood news, " + str(url) + " is using WordPress!\n")
-                                wp_domains.append(url)
-                        except urllib.error.HTTPError:
-                            try:
-                                if urllib.request.urlopen(req_wpc):
-                                    print("\nGood news, " + str(url) + " is using WordPress!\n")
-                                    wp_domains.append(url)
-                            except urllib.error.HTTPError:
-                                try:
-                                    if urllib.request.urlopen(req_wpx):
-                                        print("\nGood news, " + str(url) + " is using WordPress!\n")
-                                        wp_domains.append(url)
-                                except urllib.error.HTTPError:
-                                    print("\n" + str(url) + " may not be using WordPress.\n")
-
-
-def url_check(url):
-    print("Checking: " + str(url))
-    try:
-        if url[:4] != "http":
-            print("[!] No protocol specified.")
-            url = "http://" + url
-            print("[+] Going with HTTP.\n")
-            print("Checking: " + str(url))
-        req = urllib.request.Request(url, headers={'User-Agent': header})
-        u = urllib.request.urlopen(req)
-        if url != u.geturl():
-            print("[!] " + url + " redirected to "+u.geturl())
-            url = u.geturl()
-            print("Checking: " + str(url))
-        wp_check(url)
-    except urllib.error.HTTPError as e:
-        if e.code == 403:
-            print("Got 403! Website seems to be behind a WAF.")
-    except urllib.error.URLError:
-        if url[:5] == "https":
-            print("[!] Couldn't connect over HTTPS.")
-            print("[+] Trying with HTTP.\n")
-            url = "http://" + url[8:]
-            print("Checking: " + str(url))
-            try:
-                url_check(url)
-            except urllib.error.URLError:
-                print("Couldn't open url, please make sure to type a valid and publicly accessible url.\n")
+                    isWp = False
+                    hostname = urlparse(url).netloc
+                    request = urllib.request.Request(url, headers={'User-Agent': UserAgent})
+                    response = urllib.request.urlopen(request, timeout=timeOut).read().decode()
+                    for check in checks:
+                        checkStr = hostname + "/" + check
+                        if checkStr in response:
+                            if notSilentMode():
+                                print("Good news, " + str(url) + " is using WordPress!")
+                            else:
+                                print(url)
+                            isWp=True
+                            break
+                        if isWp == True:
+                            continue
+                except Exception as err:
+                    pass
         else:
-            print("Couldn't open url, please make sure to type a valid and publicly accessible url.\n")
-    except ValueError:
-        print("Invalid url! Please type in correct url.\n")
+            pass
+    except Exception as e:
+        pass
 
-def help():
-    print("\nSyntax: wpdetect <website-url>")
-    print("Example: wpdetect https://iamlizu.com/")
-    print("or supply a list with '-f' flag")
-    print("Example: wpdetect -f domainlist.txt\n")
+def import_targets(arrayOfTargets, singleTarget, fileName):
+    targets = []
+    if len(arrayOfTargets) > 0:
+        for target in arrayOfTargets:
+            if len(target) > 0: ## if target is not an empty string
+                targets.append(target)
+    
+    if len(singleTarget) != 0:
+        targets.append(singleTarget)
 
-def main():
-    try:
-        print(figlet_format('     wpdetect     '))
-        print("=================== version: 1.3.6 ===================\n")
-        if sys.argv[1] == '-h' or sys.argv[1] == '--help':
-            help()
-            sys.exit()
-        if sys.argv[1] == '-v' or sys.argv[1] == '--version':
-        	print("Version: 1.3.6")
-        	sys.exit()
-        if sys.argv[1] == '-f' or sys.argv[1] == '--file':
-            try:
-                if len(sys.argv) > 2:
-                    file = open(sys.argv[2], 'r')
-                    domains = file.readlines()
-                    print("Targets.../\n")
-                    for domain in domains:
-                        print(domain.strip())
-                    print("\n")
-                    for domain in domains:
-                        url = domain.strip()
-                        url_check(url)
-                    if len(wp_domains) > 0:
-                        print("Found WordPress installation in.../")
-                        for domain in wp_domains:
-                            print(domain)
-                    elif len(wp_domains) == 0:
-                        print("No WordPress installation found!")
-                    sys.exit()
-                else:
-                    print("No list supplied!")
-                    help()
-            except FileNotFoundError:
-                    print("Please enter file name correctly, file not found!\n")
+    if fileName != "":
+        if os.path.isfile(fileName):
+            with open(fileName, "r") as targetsFile:
+                for line in targetsFile:
+                    if line.strip() != "":
+                        targets.append(line.strip())
+
+    for target in targets:
+        mutatedTarget = []
+        if checkProtocol(target) == False:
+            if cliOptions['preferHttp']:
+                mutatedTarget.append("http://" + target)
+            elif cliOptions['preferHttps']:
+                mutatedTarget.append("https://" + target)
+            else:
+                mutatedTarget.append("http://" + target)
+                mutatedTarget.append("https://" + target)
         else:
-            url = sys.argv[1]
-            url_check(url)
+            pass
+        for tgt in mutatedTarget:
+            targets.append(tgt)
 
-    except IndexError:
-        print("You didn't enter anything! Please try agian, make sure to enter a valid url.")
-        help()
-    except KeyboardInterrupt:
-    	print("\nAborted by user.")
+    targets = list(filter(isUrl, targets))
+    return targets
 
 
-if __name__ == '__main__':
-	main()
+@click.command()
+@click.argument("domain", default="")
+@click.option("--mode", default="fast",help="Mode of the scan [fast | slow] Experimental: Dont use this now")
+@click.option("-m", "mode", default="fast",help="Mode of the scan [fast | slow] Experimental: Dont use this now")
+@click.option("--url", help="Url that you want to scan", default="")
+@click.option("-u", "url", help="Short flag of --url", default="")
+@click.option("--file", help="File to import URLs from", default="")
+@click.option("-f", "file", help="Short flag of --file",default="")
+@click.option("--preferhttp/--not-preferhttp", help="If a URL without protocol is specified, only check for wordpress in HTTP port 80", default=False)
+@click.option("-ph/-np", "preferhttp", help="Short flag of --preferhttp",default=False)
+@click.option("--preferhttps/--not-preferhttps", help="If a URL without protocol is specified, only check for wordpress in HTTPS port 443", default=False)
+@click.option("-phs/-nphs", "preferhttps", help="Short flag of --preferhttps", default=False)
+@click.option("--targets", default=sys.stdin, help="This is used to refer to the values sent in standard input", type=click.File('r'))
+@click.option("--threads", default=1, help="Specify the number of threads")
+@click.option("-tr", "threads", default=1, help="Short flag for --threads")
+@click.option("--silent/--not-silent", default=False, help="Do not display banner, just return URLs in the output")
+@click.option("-s/--ns", "silent", default=False, help="Short flag for --silent")
+@click.option("--timeout", default=5, help="HTTP Timeout in seconds")
+@click.option("-t", "timeout", default=5, help="Short flag for --timeout")
+@click.help_option('-h', '--help')
+def main(url, mode, file, targets, threads, timeout, silent, preferhttp, preferhttps, domain):
+    if domain != "":
+        url=domain
+
+    cliOptions["silent"] = silent
+    cliOptions["url"] = url
+    cliOptions["file"] = file
+    cliOptions["threads"] = threads
+    cliOptions["timeout"] = timeout
+    cliOptions["preferHttp"] = preferhttp
+    cliOptions["preferHttps"] = preferhttps
+    output(banner)
+    if sys.stdin.isatty() == False: # if targets are passed via the standard input
+        with targets:
+            stdinTargets = targets.read().split("\n")
+            targets = import_targets(stdinTargets, url, file)
+            targetsArray = splitArray(targets, threads)
+            output("Please wait.../")
+            for t in targetsArray:
+                thread = threading.Thread(target=isWordpress, args=[t, mode, timeout])
+                thread.start()
+            #isWordpress(targets, mode)
+            
+    else: # if standard input is empty
+        targets = import_targets([], url, file)
+        targetsArray = splitArray(targets, threads)
+        output("Please wait.../")
+        for t in targetsArray:
+            thread = threading.Thread(target=isWordpress, args=[t, mode, timeout])
+            thread.start()
+        #isWordpress(targets, mode)
+
+if __name__ == "__main__":
+    main()

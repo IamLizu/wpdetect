@@ -17,7 +17,9 @@ setup(
   download_url = 'https://github.com/IamLizu/wpdetect/archive/v_1_3_6.tar.gz',
   keywords = ['WordPress', 'Detect', 'wpdetect'],
   install_requires=[
-          'pyfiglet',
+          'click',
+          'validators',
+          'pyfiglet'
       ],
   entry_points = {
         'console_scripts': [
