@@ -14,6 +14,12 @@ wpdetect requires Python 3 or above to run. If you have Python 2 installed too, 
 Syntax
 
 
+
+```sh
+wpdetect https://www.wordpress.com/
+```
+
+
 ```sh
 wpdetect --url https://www.wordpress.com/
 ```
