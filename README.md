@@ -15,7 +15,7 @@ Syntax
 
 
 ```sh
-wpdetect --url https://www.malcare.com/
+wpdetect --url https://www.wordpress.com/
 ```
 
 
@@ -24,7 +24,7 @@ cat URLs.txt | wpdetect
 ```
 
 ```sh
-echo https://hackerone.com | wpdetect
+echo https://www.wordpress.com | wpdetect
 ```
 
 
@@ -35,7 +35,7 @@ wpdetect --file urls.txt
 
 Where `urls.txt` will contain domains like this,
 ```sh
-https://www.malcare.com/
+https://www.wordpress.com/
 https://www.newyorker.com/
 http://www.techcrunch.com/
 ```
@@ -43,14 +43,27 @@ http://www.techcrunch.com/
 
 Please note that, it is not always possible to detect the presence of WordPress, website admins can take extra measures to remove sign of WordPress.
 
+
 ## Options
 
-| Option | Description | Default Vaue |
+| Option | Description | Default Value (Behavior) |
 |--------|-------------|--------------|
-| --file | Path of the file containing URLs separated by new line characters    | Empty String |
-|  --url | URL of the target         |              |
-|--threads| Number of threads|1|
-|--timeout| Timeout of the HTTP request in seconds | 5 |
+| --file, -f | Path of the file containing URLs separated by new line characters    | Empty String |
+|  --url, -u | URL of the target                                                    |              |
+|--threads, -tr| Number of threads                                                   |1             |
+|--timeout, -t| Timeout of the HTTP request in seconds                              |5            |
+|--silent, -s| Only display URLs using wordpress, don't display banners and any other text | False|
+|--preferhttp, -ph| If URL doesn't have http or https, only scan http | Scan both|
+|--preferhttps, -phs| If URL doesn't have http or https, only scan https | Scan both |
+
 
 ## Upcoming features
 1. **Asynchronous**: We're designing the tool to work in an asynchronous way, this means that there will be further improvements in speed.
+
+
+### What's new in version 1.3.7
+1. Improved performance
+2. Multi-Threading
+3. Silent Mode
+4. Ability to feed targets from standard input
+5. Ability to tune HTTP Request timeout

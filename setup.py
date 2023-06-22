@@ -18,7 +18,8 @@ setup(
   keywords = ['WordPress', 'Detect', 'wpdetect'],
   install_requires=[
           'click',
-          'validators'
+          'validators',
+          'pyfiglet'
       ],
   entry_points = {
         'console_scripts': [
