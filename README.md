@@ -44,6 +44,10 @@ Please note that, it is not always possible to detect the presence of WordPress,
 
 #### What's new in version 1.3.7
 
+-   Fixed [#8](https://github.com/IamLizu/wpdetect/issues)
+
+#### What's new in version 1.3.7
+
 -   Migrated to Hatchling build system
 -   Updated README
 

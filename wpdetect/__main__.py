@@ -4,7 +4,7 @@ import sys
 from pyfiglet import figlet_format
 
 header = "'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'"
-version = "1.3.7"
+version = "1.3.8"
 wp_domains = []
 
 
