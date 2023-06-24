@@ -7,29 +7,32 @@ version = "1.3.7"
 wp_domains = []
 
 
-def printLogo():
+def print_logo():
     print(figlet_format('     wpdetect     '))
     print("=================== version: " + version + " ===================\n")
 
 
-def wp_check_v2(url):
-    wpSignature = urllib.request.Request(url, headers={'User-Agent': header})
+def wp_check(url):
+    wp_signature = urllib.request.Request(url, headers={'User-Agent': header})
 
     try:
-        if urllib.request.urlopen(wpSignature):
+        if urllib.request.urlopen(wp_signature):
             return True
 
     except urllib.error.HTTPError:
         pass
 
 
-def checkProtocol(url):
-    if url[:4] != "http":
-        print("[!] No protocol specified.")
-        url = "http://" + url
-        print("[+] Going with HTTP.\n")
-        print("Checking: " + str(url))
+def check_protocol(url):
+    print("[!] No protocol specified.")
+    url = "http://" + url
+    print("[+] Going with HTTP.\n")
+    print("Checking: " + str(url))
 
+    return url
+
+
+def check_redirect(url):
     req = urllib.request.Request(url, headers={'User-Agent': header})
     u = urllib.request.urlopen(req)
 
@@ -41,7 +44,7 @@ def checkProtocol(url):
     return url
 
 
-def checkHTTP(url):
+def check_HTTP(url):
     print("[!] Couldn't connect over HTTPS.")
     print("[+] Trying with HTTP.\n")
     url = "http://" + url[8:]
@@ -53,9 +56,12 @@ def checkHTTP(url):
 def url_check(url, isBatch=False):
     print("Checking: " + str(url))
     try:
-        url = checkProtocol(url)
+        if url[:4] != "http":
+            url = check_protocol(url)
 
-        wpSignatures = {
+        url = check_redirect(url)
+
+        wp_signatures = {
             1: url + "/wp-login.php",
             2: url + "/wp-content/",
             3: url + "/wp-admin/",
@@ -65,9 +71,9 @@ def url_check(url, isBatch=False):
             7: url + "/wp-content/themes/",
         }
 
-        # run wp_check for each url in wpSignatures
-        for wpSignature in wpSignatures:
-            result = wp_check_v2(wpSignatures[wpSignature])
+        # run wp_check for each url in wp_signatures
+        for wp_signature in wp_signatures:
+            result = wp_check(wp_signatures[wp_signature])
 
             if result:
                 print("[✓] WordPress found at: " + url)
@@ -83,7 +89,7 @@ def url_check(url, isBatch=False):
 
     except urllib.error.URLError:
         if url[:5] == "https":
-            url = checkHTTP(url)
+            url = check_HTTP(url)
 
             try:
                 url_check(url)
@@ -99,51 +105,61 @@ def url_check(url, isBatch=False):
 
 def usage():
     print("\nSyntax: wpdetect <website-url>")
-    print("Example: wpdetect https://iamlizu.com/")
+    print("Example: wpdetect https://wordpress.org/")
     print("or supply a list with '-f' flag")
     print("Example: wpdetect -f domainlist.txt\n")
 
 
-def main():
+def handle_file(filename):
     try:
-        printLogo()
+        file = open(filename, 'r')
+        domains = file.readlines()
 
-        if sys.argv[1] == '-h' or sys.argv[1] == '--help':
-            usage()
-            sys.exit()
+        print("Targets,\n")
 
-        if sys.argv[1] == '-v' or sys.argv[1] == '--version':
-            print("Version: 1.3.7")
-            sys.exit()
+        for domain in domains:
+            print(domain.strip())
+        print("\n")
 
-        if sys.argv[1] == '-f' or sys.argv[1] == '--file':
-            try:
-                if len(sys.argv) > 2:
-                    file = open(sys.argv[2], 'r')
-                    domains = file.readlines()
+        for domain in domains:
+            url = domain.strip()
+            url_check(url, isBatch=True)
 
-                    print("Targets.../\n")
+    except FileNotFoundError:
+        print("Please enter the file name correctly, file not found!\n")
 
-                    for domain in domains:
-                        print(domain.strip())
-                    print("\n")
 
-                    for domain in domains:
-                        url = domain.strip()
-                        url_check(url, isBatch=True)
+arguments = {
+    '-h': usage,
+    '--help': usage,
+    '-v': lambda: print(version),
+    '--version': lambda: print(version),
+    '-f':  handle_file,
+    '--file': handle_file
+}
 
-                else:
-                    print("No list supplied!")
-                    usage()
-            except FileNotFoundError:
-                print("Please enter file name correctly, file not found!\n")
+
+def main():
+    print_logo()
+
+    try:
+        if len(sys.argv) > 1:
+            argument = sys.argv[1]
+
+            # Check if the argument exists in the dictionary
+            if argument in arguments:
+                # Execute the corresponding action
+                arguments[argument](*sys.argv[2:])
+
+            else:
+                # Assume it's a URL and pass it to url_check
+                url_check(argument)
         else:
-            url = sys.argv[1]
-            url_check(url)
+            usage()
 
     except IndexError:
         print(
-            "You didn't enter anything! Please try agian, make sure to enter a valid url.")
+            "You didn't enter anything! Please try again, make sure to enter a valid url.")
         usage()
 
     except KeyboardInterrupt:
