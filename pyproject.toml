@@ -4,9 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "wpdetect"
-version = "1.3.7"
+version = "1.3.8"
 dependencies = [
-    "pyfiglet",
+    "pyfiglet", "requests"
 ]
 authors = [
   { name="S M Mahmudul Hasan", email="thegeek@iamlizu.com" },
