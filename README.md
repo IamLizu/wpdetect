@@ -42,7 +42,7 @@ Please note that, it is not always possible to detect the presence of WordPress,
 
 ## Changelog
 
-#### What's new in version 1.3.7
+#### What's new in version 1.3.8
 
 -   Fixed [#8](https://github.com/IamLizu/wpdetect/issues)
 
