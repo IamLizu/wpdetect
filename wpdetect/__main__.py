@@ -1,4 +1,5 @@
 import urllib.request
+import requests
 import sys
 from pyfiglet import figlet_format
 
@@ -33,15 +34,16 @@ def check_protocol(url):
 
 
 def check_redirect(url):
-    req = urllib.request.Request(url, headers={'User-Agent': header})
-    u = urllib.request.urlopen(req)
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    response = requests.head(url, allow_redirects=True, headers=headers)
+    redirected_url = response.url
 
-    if url != u.geturl():
-        print("[!] " + url + " redirected to "+u.geturl())
-        url = u.geturl()
-        print("Checking: " + str(url))
-
-    return url
+    if url != redirected_url:
+        print("[!] {} redirected to {}".format(url, redirected_url))
+        # Recursively follow the redirect
+        return check_redirect(redirected_url)
+    else:
+        return redirected_url
 
 
 def check_HTTP(url):
