@@ -2,105 +2,95 @@ import urllib.request
 import sys
 from pyfiglet import figlet_format
 
-wp_domains = []
 header = "'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'"
+version = "1.3.7"
+wp_domains = []
+
+
+def print_logo():
+    print(figlet_format('     wpdetect     '))
+    print("=================== version: " + version + " ===================\n")
 
 
 def wp_check(url):
-    url_wpl = url + "/wp-login.php"
-    url_wpac = url + "/wp-content/"
-    url_wpad = url + "/wp-admin/"
-    url_wpc = url + "/wp-cron.php"
-    url_wpx = url + "/xmlrpc.php"
-    url_wpa = url + "/wp-json/wp/v2/"
-    url_wpact = url + "/wp-content/themes/"
+    wp_signature = urllib.request.Request(url, headers={'User-Agent': header})
 
-    req_wpl = urllib.request.Request(url_wpl, headers={'User-Agent': header})
-    req_wpac = urllib.request.Request(url_wpac, headers={'User-Agent': header})
-    req_wpact = urllib.request.Request(
-        url_wpact, headers={'User-Agent': header})
-    req_wpacp = urllib.request.Request(
-        url_wpact, headers={'User-Agent': header})
-    req_wpad = urllib.request.Request(url_wpad, headers={'User-Agent': header})
-    req_wpc = urllib.request.Request(url_wpc, headers={'User-Agent': header})
-    req_wpx = urllib.request.Request(url_wpx, headers={'User-Agent': header})
-    req_wpa = urllib.request.Request(url_wpa, headers={'User-Agent': header})
-
-    print("Please wait.../")
     try:
-        if urllib.request.urlopen(req_wpa):
-            print("\nGood news, " + str(url) + " is using WordPress!\n")
-            wp_domains.append(url)
+        if urllib.request.urlopen(wp_signature):
+            return True
+
     except urllib.error.HTTPError:
-        try:
-            if urllib.request.urlopen(req_wpl):
-                print("\nGood news, " + str(url) + " is using WordPress!\n")
-                wp_domains.append(url)
-        except urllib.error.HTTPError:
-            try:
-                if urllib.request.urlopen(req_wpac):
-                    print("\nGood news, " + str(url) +
-                          " is using WordPress!\n")
-                    wp_domains.append(url)
-            except urllib.error.HTTPError:
-                try:
-                    if urllib.request.urlopen(req_wpact):
-                        print("\nGood news, " + str(url) +
-                              " is using WordPress!\n")
-                        wp_domains.append(url)
-                except urllib.error.HTTPError:
-                    try:
-                        if urllib.request.urlopen(req_wpacp):
-                            print("\nGood news, " + str(url) +
-                                  " is using WordPress!\n")
-                            wp_domains.append(url)
-                    except urllib.error.HTTPError:
-                        try:
-                            if urllib.request.urlopen(req_wpad):
-                                print("\nGood news, " + str(url) +
-                                      " is using WordPress!\n")
-                                wp_domains.append(url)
-                        except urllib.error.HTTPError:
-                            try:
-                                if urllib.request.urlopen(req_wpc):
-                                    print("\nGood news, " + str(url) +
-                                          " is using WordPress!\n")
-                                    wp_domains.append(url)
-                            except urllib.error.HTTPError:
-                                try:
-                                    if urllib.request.urlopen(req_wpx):
-                                        print("\nGood news, " + str(url) +
-                                              " is using WordPress!\n")
-                                        wp_domains.append(url)
-                                except urllib.error.HTTPError:
-                                    print("\n" + str(url) +
-                                          " may not be using WordPress.\n")
+        pass
 
 
-def url_check(url):
+def check_protocol(url):
+    print("[!] No protocol specified.")
+    url = "http://" + url
+    print("[+] Going with HTTP.\n")
+    print("Checking: " + str(url))
+
+    return url
+
+
+def check_redirect(url):
+    req = urllib.request.Request(url, headers={'User-Agent': header})
+    u = urllib.request.urlopen(req)
+
+    if url != u.geturl():
+        print("[!] " + url + " redirected to "+u.geturl())
+        url = u.geturl()
+        print("Checking: " + str(url))
+
+    return url
+
+
+def check_HTTP(url):
+    print("[!] Couldn't connect over HTTPS.")
+    print("[+] Trying with HTTP.\n")
+    url = "http://" + url[8:]
+    print("Checking: " + str(url))
+
+    return url
+
+
+def url_check(url, isBatch=False):
     print("Checking: " + str(url))
     try:
         if url[:4] != "http":
-            print("[!] No protocol specified.")
-            url = "http://" + url
-            print("[+] Going with HTTP.\n")
-            print("Checking: " + str(url))
-        req = urllib.request.Request(url, headers={'User-Agent': header})
-        u = urllib.request.urlopen(req)
-        if url != u.geturl():
-            print("[!] " + url + " redirected to "+u.geturl())
-            url = u.geturl()
-            print("Checking: " + str(url))
-        wp_check(url)
+            url = check_protocol(url)
+
+        url = check_redirect(url)
+
+        wp_signatures = {
+            1: url + "/wp-login.php",
+            2: url + "/wp-content/",
+            3: url + "/wp-admin/",
+            4: url + "/wp-cron.php",
+            5: url + "/xmlrpc.php",
+            6: url + "/wp-json/wp/v2/",
+            7: url + "/wp-content/themes/",
+        }
+
+        # run wp_check for each url in wp_signatures
+        for wp_signature in wp_signatures:
+            result = wp_check(wp_signatures[wp_signature])
+
+            if result:
+                print("[✓] WordPress found at: " + url)
+                wp_domains.append(url)
+                break
+
+        if len(wp_domains) == 0 and isBatch == False:
+            print("[X] No WordPress installation found!")
+
     except urllib.error.HTTPError as e:
         if e.code == 403:
             print("Got 403! Website seems to be behind a WAF.")
+
     except urllib.error.URLError:
         if url[:5] == "https":
-            print("[!] Couldn't connect over HTTPS.")
-            print("[+] Trying with HTTP.\n")
-            url = "http://" + url[8:]
-            print("Checking: " + str(url))
+            url = check_HTTP(url)
+
             try:
                 url_check(url)
             except urllib.error.URLError:
@@ -113,55 +103,65 @@ def url_check(url):
         print("Invalid url! Please type in correct url.\n")
 
 
-def help():
+def usage():
     print("\nSyntax: wpdetect <website-url>")
-    print("Example: wpdetect https://iamlizu.com/")
+    print("Example: wpdetect https://wordpress.org/")
     print("or supply a list with '-f' flag")
     print("Example: wpdetect -f domainlist.txt\n")
 
 
-def main():
+def handle_file(filename):
     try:
-        print(figlet_format('     wpdetect     '))
-        print("=================== version: 1.3.6 ===================\n")
-        if sys.argv[1] == '-h' or sys.argv[1] == '--help':
-            help()
-            sys.exit()
-        if sys.argv[1] == '-v' or sys.argv[1] == '--version':
-            print("Version: 1.3.6")
-            sys.exit()
-        if sys.argv[1] == '-f' or sys.argv[1] == '--file':
-            try:
-                if len(sys.argv) > 2:
-                    file = open(sys.argv[2], 'r')
-                    domains = file.readlines()
-                    print("Targets.../\n")
-                    for domain in domains:
-                        print(domain.strip())
-                    print("\n")
-                    for domain in domains:
-                        url = domain.strip()
-                        url_check(url)
-                    if len(wp_domains) > 0:
-                        print("Found WordPress installation in.../")
-                        for domain in wp_domains:
-                            print(domain)
-                    elif len(wp_domains) == 0:
-                        print("No WordPress installation found!")
-                    sys.exit()
-                else:
-                    print("No list supplied!")
-                    help()
-            except FileNotFoundError:
-                print("Please enter file name correctly, file not found!\n")
+        file = open(filename, 'r')
+        domains = file.readlines()
+
+        print("Targets,\n")
+
+        for domain in domains:
+            print(domain.strip())
+        print("\n")
+
+        for domain in domains:
+            url = domain.strip()
+            url_check(url, isBatch=True)
+
+    except FileNotFoundError:
+        print("Please enter the file name correctly, file not found!\n")
+
+
+arguments = {
+    '-h': usage,
+    '--help': usage,
+    '-v': lambda: print(version),
+    '--version': lambda: print(version),
+    '-f':  handle_file,
+    '--file': handle_file
+}
+
+
+def main():
+    print_logo()
+
+    try:
+        if len(sys.argv) > 1:
+            argument = sys.argv[1]
+
+            # Check if the argument exists in the dictionary
+            if argument in arguments:
+                # Execute the corresponding action
+                arguments[argument](*sys.argv[2:])
+
+            else:
+                # Assume it's a URL and pass it to url_check
+                url_check(argument)
         else:
-            url = sys.argv[1]
-            url_check(url)
+            usage()
 
     except IndexError:
         print(
-            "You didn't enter anything! Please try agian, make sure to enter a valid url.")
-        help()
+            "You didn't enter anything! Please try again, make sure to enter a valid url.")
+        usage()
+
     except KeyboardInterrupt:
         print("\nAborted by user.")
 

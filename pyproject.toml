@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wpdetect"
+version = "1.3.7"
+dependencies = [
+    "pyfiglet",
+]
+authors = [
+  { name="S M Mahmudul Hasan", email="thegeek@iamlizu.com" },
+]
+description = "A WordPress detection tool, detects if a website is running WordPress"
+readme = "README.md"
+requires-python = ">=3.4"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    'Development Status :: 5 - Production/Stable',
+    'Topic :: Software Development :: Build Tools',
+    'Intended Audience :: Developers',
+]
+
+[project.urls]
+"Homepage" = "https://github.com/IamLizu/wpdetect"
+"Bug Tracker" = "https://github.com/IamLizu/wpdetect/issues"
+
+[project.scripts]
+wpdetect = "wpdetect.__main__:main"
