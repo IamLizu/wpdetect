@@ -6,6 +6,7 @@ description: A simple script to detect if a website is running WordPress.
 import sys
 import urllib.request
 import requests
+import click
 from pyfiglet import figlet_format
 
 HEADER = "'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14" + \
@@ -166,44 +167,27 @@ def handle_file(filename):
         print("Please enter the file name correctly, file not found!\n")
 
 
-arguments = {
-    '-h': usage,
-    '--help': usage,
-    '-v': lambda: print(VERSION),
-    '--version': lambda: print(VERSION),
-    '-f':  handle_file,
-    '--file': handle_file
-}
-
-
-def main():
-    """Main function."""
+@click.command()
+@click.argument('url', required=False)
+@click.option('-f', '--file', type=click.Path(exists=True), help="File with list of URLs to check.")
+@click.option('-v', '--version', is_flag=True, help="Print version.")
+def main(url, file, version):
+    """Detects if a website is running WordPress."""
 
     print_logo(VERSION)
 
-    try:
-        if len(sys.argv) > 1:
-            argument = sys.argv[1]
+    if url:
+        url_check(url)
 
-            # Check if the argument exists in the dictionary
-            if argument in arguments:
-                # Execute the corresponding action
-                arguments[argument](*sys.argv[2:])
+    if file:
+        handle_file(file)
 
-            else:
-                # Assume it's a URL and pass it to url_check
-                url_check(argument)
-        else:
-            usage()
+    if version:
+        print(VERSION)
 
-    except IndexError:
-        print(
-            "You didn't enter anything! Please try again, make sure to enter a valid url.")
+    if len(sys.argv) == 1:
         usage()
-
-    except KeyboardInterrupt:
-        print("\nAborted by user.")
 
 
 if __name__ == '__main__':
-    main()
+    main(None, None, None)
