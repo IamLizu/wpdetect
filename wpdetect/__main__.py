@@ -84,13 +84,13 @@ def check_http(url):
     return url
 
 
-def url_check(url, is_batch=False, show_signature=False):
+def url_check(url, show_signature=False):
     """
         Checks if the url is valid and publicly accessible.
         If so, it runs wp_check on it.
     """
 
-    print("Checking: " + str(url))
+    print("\nChecking: " + str(url))
     try:
         if url[:4] != "http":
             url = check_protocol(url)
@@ -117,10 +117,9 @@ def url_check(url, is_batch=False, show_signature=False):
                 print(f"[✓] WordPress found at: {url_to_print}")
 
                 wp_domains.append(url)
-                break
-
-        if len(wp_domains) == 0 and is_batch is False:
-            print("[X] No WordPress installation found!")
+            else:
+                print(f"[✗] WordPress not found at: {url}")
+            break
 
     except urllib.error.HTTPError as error:
         if error.code == 403:
@@ -151,11 +150,10 @@ def handle_file(filename, show_signature=False):
 
             for domain in domains:
                 print(domain.strip())
-            print("\n")
 
             for domain in domains:
                 url = domain.strip()
-                url_check(url, True, show_signature)
+                url_check(url, show_signature)
 
     except FileNotFoundError:
         print("Please enter the file name correctly, file not found!\n")
@@ -174,7 +172,7 @@ def main(url, file, version, show_signature):
         print_logo(VERSION)
 
     if url:
-        url_check(url, False, show_signature)
+        url_check(url, show_signature)
 
     if file:
         handle_file(file, show_signature)
