@@ -42,6 +42,12 @@ Please note that, it is not always possible to detect the presence of WordPress,
 
 ## Changelog
 
+#### What's new in version 1.4.0
+
+-   Removed manual argument parsing.
+-   Introduced [click](https://click.palletsprojects.com/en/8.1.x/) and parsing arguments with it.
+-   Added a sample URL in the repo for ease of testing.
+
 #### What's new in version 1.3.9
 
 -   Minor bug fixes
