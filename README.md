@@ -42,6 +42,12 @@ Please note that, it is not always possible to detect the presence of WordPress,
 
 ## Changelog
 
+#### What's new in version 1.3.9
+
+-   Minor bug fixes
+-   Added workflow for linting on code push
+-   Added workflow for publishing to PyPi on release
+
 #### What's new in version 1.3.8
 
 -   Fixed [#8](https://github.com/IamLizu/wpdetect/issues/8)

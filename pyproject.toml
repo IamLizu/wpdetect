@@ -4,12 +4,12 @@ build-backend = "hatchling.build"
 
 [project]
 name = "wpdetect"
-version = "1.3.8"
+version = "1.3.9"
 dependencies = [
     "pyfiglet", "requests"
 ]
 authors = [
-  { name="S M Mahmudul Hasan", email="thegeek@iamlizu.com" },
+  { name="S M Mahmudul Hasan", email="he@smmahmudulhasan.com" },
 ]
 description = "A WordPress detection tool, detects if a website is running WordPress"
 readme = "README.md"
