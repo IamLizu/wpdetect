@@ -20,11 +20,14 @@ ERROR_UNABLE_TO_OPEN_URL = "Couldn't open url," + \
 wp_domains = []
 
 
-def print_logo():
-    """Prints the logo with version number."""
+def print_logo(version):
+    """
+        print_logo(version)
+        Prints the logo with version number.
+    """
 
     print(figlet_format('     wpdetect     '))
-    print("=================== VERSION: " + VERSION + " ===================\n")
+    print("=================== VERSION: " + version + " ===================\n")
 
 
 def wp_check(url):
@@ -175,7 +178,7 @@ arguments = {
 def main():
     """Main function."""
 
-    print_logo()
+    print_logo(VERSION)
 
     try:
         if len(sys.argv) > 1:
