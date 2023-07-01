@@ -84,7 +84,7 @@ def check_http(url):
     return url
 
 
-def url_check(url, is_batch=False):
+def url_check(url, is_batch=False, show_signature=False):
     """
         Checks if the url is valid and publicly accessible.
         If so, it runs wp_check on it.
@@ -112,7 +112,10 @@ def url_check(url, is_batch=False):
             result = wp_check(wp_signature)
 
             if result:
-                print("[✓] WordPress found at: " + url)
+                url_to_print = wp_signature if show_signature else url
+
+                print(f"[✓] WordPress found at: {url_to_print}")
+
                 wp_domains.append(url)
                 break
 
@@ -137,16 +140,7 @@ def url_check(url, is_batch=False):
         print("Invalid url! Please type in correct url.\n")
 
 
-def usage():
-    """Prints the usage of the program."""
-
-    print("\nSyntax: wpdetect <website-url>")
-    print("Example: wpdetect https://wordpress.org/")
-    print("or supply a list with '-f' flag")
-    print("Example: wpdetect -f domain_list.txt\n")
-
-
-def handle_file(filename):
+def handle_file(filename, show_signature=False):
     """Opens the file and runs url_check for each line."""
 
     try:
@@ -161,33 +155,36 @@ def handle_file(filename):
 
             for domain in domains:
                 url = domain.strip()
-                url_check(url, is_batch=True)
+                url_check(url, True, show_signature)
 
     except FileNotFoundError:
         print("Please enter the file name correctly, file not found!\n")
 
 
-@click.command()
+@click.command(context_settings={"help_option_names": ['-h', '--help']})
 @click.argument('url', required=False)
 @click.option('-f', '--file', type=click.Path(exists=True), help="File with list of URLs to check.")
 @click.option('-v', '--version', is_flag=True, help="Print version.")
-def main(url, file, version):
+@click.option('-ss', '--show-signature', is_flag=True,
+              help="Show by which signature WordPress is detected in a domain.")
+def main(url, file, version, show_signature):
     """Detects if a website is running WordPress."""
 
-    print_logo(VERSION)
+    if version is False:
+        print_logo(VERSION)
 
     if url:
-        url_check(url)
+        url_check(url, False, show_signature)
 
     if file:
-        handle_file(file)
+        handle_file(file, show_signature)
 
     if version:
-        print(VERSION)
+        print(f"Version: {VERSION}")
 
     if len(sys.argv) == 1:
-        usage()
+        click.echo(click.get_current_context().get_help())
 
 
 if __name__ == '__main__':
-    main(None, None, None)
+    main(None, None, None, None)
