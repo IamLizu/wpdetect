@@ -24,6 +24,7 @@ wp_domains = []
 # cli options store
 cli_options = {
     'verbose': True,  # default value
+    'show_signature': False,  # default value
 }
 
 
@@ -98,7 +99,7 @@ def check_http(url):
     return url
 
 
-def url_check(url, show_signature=False):
+def url_check(url):
     """
         Checks if the url is valid and publicly accessible.
         If so, it runs wp_check on it.
@@ -126,7 +127,7 @@ def url_check(url, show_signature=False):
             result = wp_check(wp_signature)
 
             if result:
-                url_to_print = wp_signature if show_signature else url
+                url_to_print = wp_signature if cli_options["show_signature"] else url
 
                 print_verbose(f"[✓] WordPress found at: {url_to_print}")
 
@@ -153,7 +154,7 @@ def url_check(url, show_signature=False):
         print_verbose("Invalid url! Please type in correct url.\n")
 
 
-def handle_file(filename, show_signature=False):
+def handle_file(filename):
     """Opens the file and runs url_check for each line."""
 
     try:
@@ -167,7 +168,7 @@ def handle_file(filename, show_signature=False):
 
             for domain in domains:
                 url = domain.strip()
-                url_check(url, show_signature)
+                url_check(url)
 
     except FileNotFoundError:
         print("Please enter the file name correctly, file not found!\n")
@@ -194,14 +195,17 @@ def main(url, file, version, show_signature, quiet):
     if quiet:
         cli_options['verbose'] = False
 
+    if show_signature:
+        cli_options['show_signature'] = True
+
     if version is False:
         print_logo(VERSION)
 
     if url:
-        url_check(url, show_signature)
+        url_check(url)
 
     if file:
-        handle_file(file, show_signature)
+        handle_file(file)
 
     if version:
         print(f"Version: {VERSION}")
