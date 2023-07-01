@@ -42,6 +42,11 @@ Please note that, it is not always possible to detect the presence of WordPress,
 
 ## Changelog
 
+#### What's new in version 1.4.1
+
+-   Fixed [#10](https://github.com/IamLizu/wpdetect/issues/10)
+-   Added `-h` in `click` help options
+
 #### What's new in version 1.4.0
 
 -   Removed manual argument parsing.
