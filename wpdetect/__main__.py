@@ -165,7 +165,8 @@ def handle_file(filename, show_signature=False):
 @click.argument('url', required=False)
 @click.option('-f', '--file', type=click.Path(exists=True), help="File with list of URLs to check.")
 @click.option('-v', '--version', is_flag=True, help="Print version.")
-@click.option('-ss', '--show-signature', is_flag=True, help="Show by which signature WordPress is detected in a domain.")
+@click.option('-ss', '--show-signature', is_flag=True,
+              help="Show by which signature WordPress is detected in a domain.")
 def main(url, file, version, show_signature):
     """Detects if a website is running WordPress."""
 
