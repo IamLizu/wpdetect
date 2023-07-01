@@ -21,14 +21,28 @@ ERROR_UNABLE_TO_OPEN_URL = "Couldn't open url," + \
 wp_domains = []
 
 
+# cli options store
+cli_options = {
+    'verbose': True,  # default value
+}
+
+
+def print_verbose(message):
+    """Prints the message if verbose is true."""
+
+    if cli_options['verbose']:
+        print(message)
+
+
 def print_logo(version):
     """
         print_logo(version)
         Prints the logo with version number.
     """
 
-    print(figlet_format('     wpdetect     '))
-    print("=================== VERSION: " + version + " ===================\n")
+    print_verbose(figlet_format('     wpdetect     '))
+    print_verbose("=================== VERSION: " +
+                  version + " ===================\n")
 
 
 def wp_check(url):
@@ -49,10 +63,10 @@ def wp_check(url):
 def check_protocol(url):
     """Checks if the url has a protocol specified, if not, it adds HTTP."""
 
-    print("[!] No protocol specified.")
+    print_verbose("[!] No protocol specified.")
     url = "http://" + url
-    print("[+] Going with HTTP.\n")
-    print("Checking: " + str(url))
+    print_verbose("[+] Going with HTTP.\n")
+    print_verbose("Checking: " + str(url))
 
     return url
 
@@ -66,7 +80,7 @@ def check_redirect(url):
     redirected_url = response.url
 
     if url != redirected_url:
-        print(f"[!] {url} redirected to {redirected_url}")
+        print_verbose(f"[!] {url} redirected to {redirected_url}")
         # Recursively follow the redirect
         return check_redirect(redirected_url)
 
@@ -76,10 +90,10 @@ def check_redirect(url):
 def check_http(url):
     """Instead of HTTPS, it tries to connect over HTTP."""
 
-    print("[!] Couldn't connect over HTTPS.")
-    print("[+] Trying with HTTP.\n")
+    print_verbose("[!] Couldn't connect over HTTPS.")
+    print_verbose("[+] Trying with HTTP.\n")
     url = "http://" + url[8:]
-    print("Checking: " + str(url))
+    print_verbose("Checking: " + str(url))
 
     return url
 
@@ -90,7 +104,7 @@ def url_check(url, show_signature=False):
         If so, it runs wp_check on it.
     """
 
-    print("\nChecking: " + str(url))
+    print_verbose("\nChecking: " + str(url))
     try:
         if url[:4] != "http":
             url = check_protocol(url)
@@ -114,16 +128,16 @@ def url_check(url, show_signature=False):
             if result:
                 url_to_print = wp_signature if show_signature else url
 
-                print(f"[✓] WordPress found at: {url_to_print}")
+                print_verbose(f"[✓] WordPress found at: {url_to_print}")
 
-                wp_domains.append(url)
+                wp_domains.append(url_to_print)
             else:
-                print(f"[✗] WordPress not found at: {url}")
+                print_verbose(f"[✗] WordPress not found at: {url}")
             break
 
     except urllib.error.HTTPError as error:
         if error.code == 403:
-            print("Got 403! Website seems to be behind a WAF.")
+            print_verbose("Got 403! Website seems to be behind a WAF.")
 
     except urllib.error.URLError:
         if url[:5] == "https":
@@ -132,11 +146,11 @@ def url_check(url, show_signature=False):
             try:
                 url_check(url)
             except urllib.error.URLError:
-                print(ERROR_UNABLE_TO_OPEN_URL)
+                print_verbose(ERROR_UNABLE_TO_OPEN_URL)
         else:
-            print(ERROR_UNABLE_TO_OPEN_URL)
+            print_verbose(ERROR_UNABLE_TO_OPEN_URL)
     except ValueError:
-        print("Invalid url! Please type in correct url.\n")
+        print_verbose("Invalid url! Please type in correct url.\n")
 
 
 def handle_file(filename, show_signature=False):
@@ -146,10 +160,10 @@ def handle_file(filename, show_signature=False):
         with open(filename, 'r', encoding='utf-8') as file:
             domains = file.readlines()
 
-            print("Targets,\n")
+            print_verbose("Targets,\n")
 
             for domain in domains:
-                print(domain.strip())
+                print_verbose(domain.strip())
 
             for domain in domains:
                 url = domain.strip()
@@ -159,14 +173,26 @@ def handle_file(filename, show_signature=False):
         print("Please enter the file name correctly, file not found!\n")
 
 
+def print_domains():
+    """Prints the found WordPress installations."""
+
+    if cli_options['verbose'] is False:
+        for wp_domain in wp_domains:
+            print(wp_domain)
+
+
 @click.command(context_settings={"help_option_names": ['-h', '--help']})
 @click.argument('url', required=False)
 @click.option('-f', '--file', type=click.Path(exists=True), help="File with list of URLs to check.")
 @click.option('-v', '--version', is_flag=True, help="Print version.")
 @click.option('-ss', '--show-signature', is_flag=True,
               help="Show by which signature WordPress is detected in a domain.")
-def main(url, file, version, show_signature):
+@click.option('-q', '--quiet', is_flag=True, help="Only print the detected domains.")
+def main(url, file, version, show_signature, quiet):
     """Detects if a website is running WordPress."""
+
+    if quiet:
+        cli_options['verbose'] = False
 
     if version is False:
         print_logo(VERSION)
@@ -183,6 +209,9 @@ def main(url, file, version, show_signature):
     if len(sys.argv) == 1:
         click.echo(click.get_current_context().get_help())
 
+    # print wp_domains if verbose is true
+    print_domains()
+
 
 if __name__ == '__main__':
-    main(None, None, None, None)
+    main(None, None, None, None, None)
