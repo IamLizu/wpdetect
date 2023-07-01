@@ -42,6 +42,10 @@ Please note that, it is not always possible to detect the presence of WordPress,
 
 ## Changelog
 
+#### What's new in version 1.4.3
+
+-   Fixed [#20](https://github.com/IamLizu/wpdetect/issues/20)
+
 #### What's new in version 1.4.2
 
 -   Fixed [#18](https://github.com/IamLizu/wpdetect/issues/18)
