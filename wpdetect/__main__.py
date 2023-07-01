@@ -161,7 +161,7 @@ def handle_file(filename, show_signature=False):
         print("Please enter the file name correctly, file not found!\n")
 
 
-@click.command()
+@click.command(context_settings={"help_option_names": ['-h', '--help']})
 @click.argument('url', required=False)
 @click.option('-f', '--file', type=click.Path(exists=True), help="File with list of URLs to check.")
 @click.option('-v', '--version', is_flag=True, help="Print version.")
