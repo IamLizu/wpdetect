@@ -4,11 +4,5 @@
         "editor.formatOnSave": true,
     },
     "python.formatting.provider": "autopep8",
-    "cSpell.words": ["figlet", "KHTML", "pyfiglet"],
-    "python.linting.enabled": true,
-    "python.linting.pylintEnabled": true,
-    "python.linting.pylintArgs": [
-      "--load-plugins",
-      "pylint.extensions.precommit"
-    ]
+    "cSpell.words": ["figlet", "KHTML", "pyfiglet"]
 }

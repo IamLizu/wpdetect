@@ -60,7 +60,8 @@ def check_redirect(url):
     """Checks if the url redirects to another url, if so, it follows the redirect."""
 
     headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.head(url, allow_redirects=True, headers=headers, timeout=5)
+    response = requests.head(url, allow_redirects=True,
+                             headers=headers, timeout=5)
     redirected_url = response.url
 
     if url != redirected_url:
