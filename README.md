@@ -53,3 +53,19 @@ http://www.techcrunch.com/
 ```
 
 Please note that, it is not always possible to detect the presence of WordPress, website admins can take extra measures to remove sign of WordPress.
+
+## Code of Conduct
+
+Please see the [code of conduct](CODE_OF_CONDUCT.md).
+
+## Security
+
+Please see the [security policy](SECURITY.md).
+
+## Contributing
+
+Please see the [contributing guide](CONTRIBUTING.md).
+
+## Changelog
+
+Please see the [changelog](CHANGELOG.md).
