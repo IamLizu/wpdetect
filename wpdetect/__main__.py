@@ -216,6 +216,20 @@ def print_domains():
             print(wp_domain)
 
 
+def full_scan(url):
+    """Scans the HTTP & HTTPS of the website for WordPress."""
+
+    print_verbose("Full scan initiated.\n")
+
+    print_verbose("[1] Scanning HTTP...")
+    url = add_scheme_to_url(url, "http")
+    url_check(url)
+
+    print_verbose("\n[2] Scanning HTTPS...")
+    url = add_scheme_to_url(url, "https")
+    url_check(url)
+
+
 @click.command(context_settings={"help_option_names": ['-h', '--help']})
 @click.argument('url', required=False)
 @click.option('-f', '--file', type=click.Path(exists=True), help="File with list of URLs to check.")
@@ -223,7 +237,9 @@ def print_domains():
 @click.option('-ss', '--show-signature', is_flag=True,
               help="Show by which signature WordPress is detected in a domain.")
 @click.option('-q', '--quiet', is_flag=True, help="Only print the detected domains.")
-def main(url, file, version, show_signature, quiet):
+@click.option('-sf', '--scan-full', is_flag=True,
+              help="Scan HTTP & HTTPS of the website for WordPress.")
+def main(url=None, file=None, version=None, show_signature=None, quiet=None, scan_full=None):
     """Detects if a website is running WordPress."""
 
     if quiet:
@@ -236,7 +252,10 @@ def main(url, file, version, show_signature, quiet):
         print_logo(VERSION)
 
     if url:
-        url_check(url)
+        if scan_full:
+            full_scan(url)
+        else:
+            url_check(url)
 
     if file:
         handle_file(file)
@@ -252,4 +271,4 @@ def main(url, file, version, show_signature, quiet):
 
 
 if __name__ == '__main__':
-    main(None, None, None, None, None)
+    main()
