@@ -14,6 +14,17 @@ wpdetect requires Python 3 or above to run. If you have Python 2 installed too, 
 
 ## Usage
 
+| Option                  | Description                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------- |
+| `url`                   | The URL to check. No need to pass the `url` flag, just pass the actual domain or url. |
+| `-f, --file`            | File with a list of URLs to check.                                                    |
+| `-v, --version`         | Print the version.                                                                    |
+| `-ss, --show-signature` | Show by which signature WordPress is detected in a domain.                            |
+| `-q, --quiet`           | Only print the detected domains.                                                      |
+| `-sf, --scan-full`      | Scan HTTP & HTTPS of the website for WordPress.                                       |
+
+Here's a few basic examples,
+
 ```sh
 wpdetect <website_url>
 ```
@@ -46,6 +57,7 @@ Please note that, it is not always possible to detect the presence of WordPress,
 
 -   Fixed [#22](https://github.com/IamLizu/wpdetect/issues/22)
 -   Cleaned http protocol adding methods.
+-   Added options in README
 
 #### What's new in version 1.4.3
 
