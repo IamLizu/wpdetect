@@ -30,8 +30,6 @@ jobs:
               run: |
                   git config --local user.email "he@smmahmudulhasan.com"
                   git config --local user.name "IamLizu"
-                  git config --local user.signingkey 4440A421596BDD78
-                  git config --local commit.gpgsign true
 
             - name: Commit changes
               run: |
