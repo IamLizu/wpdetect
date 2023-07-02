@@ -5,7 +5,7 @@ description: A simple script to detect if a website is running WordPress.
 
 import sys
 import urllib.request
-import requests
+from urllib.parse import urlparse
 import click
 from pyfiglet import figlet_format
 
@@ -46,6 +46,12 @@ def print_logo(version):
                   version + " ===================\n")
 
 
+def print_checking_message(url):
+    """Prints the message before checking the url."""
+
+    print_verbose("\nChecking: " + str(url))
+
+
 def wp_check(url):
     """Checks if the given url is a WordPress installation."""
 
@@ -61,28 +67,55 @@ def wp_check(url):
     return False
 
 
-def check_protocol(url):
+def get_protocol(url):
+    """Returns the protocol of the url."""
+
+    parsed_url = urlparse(url)
+    return parsed_url.scheme if parsed_url.scheme else None
+
+
+def add_scheme_to_url(url, scheme):
+    """Adds the scheme to the url."""
+
+    parsed_url = urlparse(url)
+    updated_url = parsed_url._replace(scheme=scheme)
+
+    return updated_url.scheme + "://" + updated_url.netloc + updated_url.path
+
+
+def add_http(url):
     """Checks if the url has a protocol specified, if not, it adds HTTP."""
 
     print_verbose("[!] No protocol specified.")
-    url = "http://" + url
-    print_verbose("[+] Going with HTTP.\n")
-    print_verbose("Checking: " + str(url))
+    print_verbose("[+] Going with HTTP.")
+
+    url = add_scheme_to_url(url, "http")
+
+    print_checking_message(url)
 
     return url
+
+
+def get_redirected_url(url):
+    """Returns the redirected url."""
+
+    opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler)
+    response = opener.open(url)
+    redirected_url = response.url
+
+    return redirected_url
 
 
 def check_redirect(url):
     """Checks if the url redirects to another url, if so, it follows the redirect."""
 
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.head(url, allow_redirects=True,
-                             headers=headers, timeout=5)
-    redirected_url = response.url
+    redirected_url = get_redirected_url(url)
 
     if url != redirected_url:
         print_verbose(f"[!] {url} redirected to {redirected_url}")
         # Recursively follow the redirect
+        print_checking_message(redirected_url)
+
         return check_redirect(redirected_url)
 
     return redirected_url
@@ -92,9 +125,9 @@ def check_http(url):
     """Instead of HTTPS, it tries to connect over HTTP."""
 
     print_verbose("[!] Couldn't connect over HTTPS.")
-    print_verbose("[+] Trying with HTTP.\n")
-    url = "http://" + url[8:]
-    print_verbose("Checking: " + str(url))
+    print_verbose("[+] Trying with HTTP.")
+
+    url = add_scheme_to_url(url, "http")
 
     return url
 
@@ -105,10 +138,11 @@ def url_check(url):
         If so, it runs wp_check on it.
     """
 
-    print_verbose("\nChecking: " + str(url))
+    print_checking_message(url)
+
     try:
-        if url[:4] != "http":
-            url = check_protocol(url)
+        if get_protocol(url) is None:
+            url = add_http(url)  # add http if no protocol specified
 
         url = check_redirect(url)
 
@@ -141,7 +175,7 @@ def url_check(url):
             print_verbose("Got 403! Website seems to be behind a WAF.")
 
     except urllib.error.URLError:
-        if url[:5] == "https":
+        if get_protocol(url) == "https":
             url = check_http(url)
 
             try:
