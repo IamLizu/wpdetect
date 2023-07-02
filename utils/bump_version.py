@@ -1,11 +1,16 @@
+"""
+    This file increments the version in pyproject.toml.
+"""
+
 import os
 import toml
 
 
 def increment_version():
     """Increments the version in pyproject.toml and returns the new version."""
+
     file_path = os.path.join(os.path.dirname(
-        __file__), '..', '..', 'pyproject.toml')
+        __file__), '..', 'pyproject.toml')
 
     with open(file_path, 'r', encoding="utf-8") as file:
         config = toml.load(file)
