@@ -13,3 +13,7 @@ git commit -S -m "release $new_version"
 # Tag the release
 echo "Tagging version $new_version"
 git tag -s "$new_version" -m "release $new_version"
+
+# Push the commit and tag
+echo "Pushing commit and tag"
+git push --follow-tags origin master
