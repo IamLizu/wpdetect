@@ -86,11 +86,9 @@ def add_scheme_to_url(url, scheme):
 def add_http(url):
     """Checks if the url has a protocol specified, if not, it adds HTTP."""
 
-    print_verbose("[!] No protocol specified.")
     print_verbose("[+] Going with HTTP.")
 
     url = add_scheme_to_url(url, "http")
-
     print_checking_message(url)
 
     return url
@@ -121,17 +119,6 @@ def check_redirect(url):
     return redirected_url
 
 
-def check_http(url):
-    """Instead of HTTPS, it tries to connect over HTTP."""
-
-    print_verbose("[!] Couldn't connect over HTTPS.")
-    print_verbose("[+] Trying with HTTP.")
-
-    url = add_scheme_to_url(url, "http")
-
-    return url
-
-
 def url_check(url):
     """
         Checks if the url is valid and publicly accessible.
@@ -142,7 +129,8 @@ def url_check(url):
 
     try:
         if get_protocol(url) is None:
-            url = add_http(url)  # add http if no protocol specified
+            print_verbose("[!] No protocol specified.")
+            url = add_http(url)
 
         url = check_redirect(url)
 
@@ -176,7 +164,8 @@ def url_check(url):
 
     except urllib.error.URLError:
         if get_protocol(url) == "https":
-            url = check_http(url)
+            print_verbose("[!] Couldn't connect over HTTPS.")
+            url = add_http(url)
 
             try:
                 url_check(url)
