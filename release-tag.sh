@@ -2,6 +2,17 @@
 
 echo "Running release-tag.sh"
 
+# Ensure we're on the master branch
+if [ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]; then
+    echo "Not on master branch, aborting"
+    exit 1
+fi
+
+# Generate the changelog
+echo "Generating changelog"
+python utils/generate_changelog.py
+
+
 # Run the version bumping script
 new_version=$(python utils/bump_version.py)
 
