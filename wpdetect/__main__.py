@@ -87,9 +87,7 @@ def add_http(url):
     """Checks if the url has a protocol specified, if not, it adds HTTP."""
 
     print_verbose("[+] Going with HTTP.")
-
     url = add_scheme_to_url(url, "http")
-    print_checking_message(url)
 
     return url
 
@@ -228,7 +226,7 @@ def full_scan(url):
 @click.option('-q', '--quiet', is_flag=True, help="Only print the detected domains.")
 @click.option('-sf', '--scan-full', is_flag=True,
               help="Scan HTTP & HTTPS of the website for WordPress.")
-def main(url=None, file=None, version=None, show_signature=None, quiet=None, scan_full=None):
+def main(*, url=None, file=None, version=None, show_signature=None, quiet=None, scan_full=None):
     """Detects if a website is running WordPress."""
 
     if quiet:
