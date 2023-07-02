@@ -34,5 +34,5 @@ jobs:
             - name: Commit changes
               run: |
                   git add CHANGELOG.md
-                  git commit -S -m "Update CHANGELOG.md"
+                  git commit -m "Update CHANGELOG.md"
                   git push
