@@ -1,15 +1,11 @@
-"""
-This module contains a function to increment the version in pyproject.toml.
-"""
-
 import os
 import toml
 
 
 def increment_version():
     """Increments the version in pyproject.toml and returns the new version."""
-
-    file_path = os.path.join(os.path.dirname(__file__), '..', 'pyproject.toml')
+    file_path = os.path.join(os.path.dirname(
+        __file__), '..', '..', 'pyproject.toml')
 
     with open(file_path, 'r', encoding="utf-8") as file:
         config = toml.load(file)
@@ -22,13 +18,15 @@ def increment_version():
     new_version = '.'.join(version_parts)
 
     # Update the version in pyproject.toml
-    config['project']['version'] = new_version
-
-    # Write the updated version back to pyproject.toml
-    file_path = os.path.join(os.path.dirname(__file__), '..', 'pyproject.toml')
-
     with open(file_path, 'r', encoding="utf-8") as file:
-        toml.dump(config, file)
+        lines = file.readlines()
+
+    with open(file_path, 'w', encoding="utf-8") as file:
+        for line in lines:
+            if line.startswith('version'):
+                file.write(f'version = "{new_version}"\n')
+            else:
+                file.write(line)
 
     return new_version
 
