@@ -38,4 +38,4 @@ def increment_version():
 
 # Call the increment_version() function
 BUMPED_VERSION = increment_version()
-print(f"Version bumped to: {BUMPED_VERSION}")
+print(f"v{BUMPED_VERSION}")
