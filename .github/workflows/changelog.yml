@@ -1,0 +1,40 @@
+name: Generate Changelog
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    update-file:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            - name: Set up Python
+              uses: actions/setup-python@v3
+              with:
+                  python-version: "3.x"
+
+            - name: Install dependencies
+              run: |
+                  python -m pip install --upgrade pip
+                  pip install requests
+
+            - name: Run script
+              run: python utils/generate_changelog.py
+
+            - name: Configure Git
+              run: |
+                  git config --local user.email "he@smmahmudulhasan.com"
+                  git config --local user.name "IamLizu"
+                  git config --local user.signingkey 4440A421596BDD78
+                  git config --local commit.gpgsign true
+
+            - name: Commit changes
+              run: |
+                  git add CHANGELOG.md
+                  git commit -S -m "Update CHANGELOG.md"
+                  git push
