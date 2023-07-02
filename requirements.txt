@@ -1,3 +1,4 @@
 requests
 pyfiglet
 click
+toml

@@ -4,14 +4,15 @@ description: A simple script to detect if a website is running WordPress.
 '''
 
 import sys
+import os
 import urllib.request
 from urllib.parse import urlparse
+import toml
 import click
 from pyfiglet import figlet_format
 
 HEADER = "'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14" + \
     " (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'"
-VERSION = "1.4.4"
 
 # Error messages
 ERROR_UNABLE_TO_OPEN_URL = "Couldn't open url," + \
@@ -27,6 +28,17 @@ cli_options = {
     'show_signature': False,  # default value
     'scan_full': False,  # default value
 }
+
+
+def get_package_version():
+    """Returns the version of the package."""
+
+    file_path = os.path.join(os.path.dirname(__file__), '..', 'pyproject.toml')
+
+    with open(file_path, 'r', encoding="utf-8") as pyproject_toml_file:
+        config = toml.load(pyproject_toml_file)
+
+    return config['project']['version']
 
 
 def print_verbose(message):
@@ -244,7 +256,7 @@ def main(*, url=None, file=None, version=None, show_signature=None, quiet=None, 
         cli_options['scan_full'] = True
 
     if version is False:
-        print_logo(VERSION)
+        print_logo(get_package_version())
 
     if url:
         if scan_full:
@@ -256,7 +268,7 @@ def main(*, url=None, file=None, version=None, show_signature=None, quiet=None, 
         handle_file(file)
 
     if version:
-        print(f"Version: {VERSION}")
+        print(f"Version: {get_package_version()}")
 
     if len(sys.argv) == 1:
         click.echo(click.get_current_context().get_help())
