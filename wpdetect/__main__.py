@@ -25,6 +25,7 @@ wp_domains = []
 cli_options = {
     'verbose': True,  # default value
     'show_signature': False,  # default value
+    'scan_full': False,  # default value
 }
 
 
@@ -189,7 +190,11 @@ def handle_file(filename):
 
             for domain in domains:
                 url = domain.strip()
-                url_check(url)
+
+                if cli_options['scan_full']:
+                    full_scan(url)
+                else:
+                    url_check(url)
 
     except FileNotFoundError:
         print("Please enter the file name correctly, file not found!\n")
@@ -206,7 +211,7 @@ def print_domains():
 def full_scan(url):
     """Scans the HTTP & HTTPS of the website for WordPress."""
 
-    print_verbose("Full scan initiated.\n")
+    print_verbose(f"\nFull scan initiated for {url}\n")
 
     print_verbose("[1] Scanning HTTP...")
     url = add_scheme_to_url(url, "http")
@@ -234,6 +239,9 @@ def main(*, url=None, file=None, version=None, show_signature=None, quiet=None, 
 
     if show_signature:
         cli_options['show_signature'] = True
+
+    if scan_full:
+        cli_options['scan_full'] = True
 
     if version is False:
         print_logo(VERSION)
