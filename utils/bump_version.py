@@ -6,6 +6,20 @@ import os
 import toml
 
 
+def write_changes_to_file(file_location, checker, version):
+    """Writes the changes to the file."""
+
+    with open(file_location, 'r', encoding="utf-8") as file:
+        lines = file.readlines()
+
+    with open(file_location, 'w', encoding="utf-8") as file:
+        for line in lines:
+            if line.startswith(checker):
+                file.write(f'{checker} = "{version}"\n')
+            else:
+                file.write(line)
+
+
 def increment_version():
     """Increments the version in pyproject.toml and returns the new version."""
 
@@ -23,15 +37,10 @@ def increment_version():
     new_version = '.'.join(version_parts)
 
     # Update the version in pyproject.toml
-    with open(file_path, 'r', encoding="utf-8") as file:
-        lines = file.readlines()
+    write_changes_to_file(file_path, 'version', new_version)
 
-    with open(file_path, 'w', encoding="utf-8") as file:
-        for line in lines:
-            if line.startswith('version'):
-                file.write(f'version = "{new_version}"\n')
-            else:
-                file.write(line)
+    # Update the version in wpdetect/__main__.py
+    write_changes_to_file('wpdetect/__main__.py', 'VERSION', new_version)
 
     return new_version
 
