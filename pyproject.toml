@@ -26,6 +26,7 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/IamLizu/wpdetect"
 "Bug Tracker" = "https://github.com/IamLizu/wpdetect/issues"
+"Changelog" = "https://github.com/IamLizu/wpdetect/blob/master/CHANGELOG.md"
 
 [project.scripts]
 wpdetect = "wpdetect.__main__:main"
