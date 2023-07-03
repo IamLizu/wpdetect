@@ -4,7 +4,6 @@ description: A simple script to detect if a website is running WordPress.
 '''
 
 import sys
-import os
 import urllib.request
 from urllib.parse import urlparse
 import toml
@@ -33,9 +32,8 @@ cli_options = {
 def get_package_version():
     """Returns the version of the package."""
 
-    file_path = os.path.join(os.path.dirname(__file__), '..', 'pyproject.toml')
-
-    with open(file_path, 'r', encoding="utf-8") as pyproject_toml_file:
+    # using absolute path to open the file because of the issue: #31
+    with open('pyproject.toml', 'r', encoding="utf-8") as pyproject_toml_file:
         config = toml.load(pyproject_toml_file)
 
     return config['project']['version']
