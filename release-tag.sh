@@ -40,6 +40,9 @@ echo "Committing changelog"
 git add CHANGELOG.md
 git commit --amend --no-edit
 
+# Tag the release again (with the changelog)
+git tag -d "$new_version"
+git tag -s "$new_version" -m "release $new_version"
 
 # Push the commit and tag
 echo "Pushing commit and tag"
