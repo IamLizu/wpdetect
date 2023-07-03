@@ -10,7 +10,7 @@ fi
 
 # Generate the changelog
 echo "Generating changelog"
-python utils/generate_changelog.py
+git-changelog -o CHANGELOG.md
 
 
 # Run the version bumping script

@@ -2,4 +2,4 @@
 
 # Generate the changelog
 echo "Generating changelog"
-python utils/generate_changelog.py
+git-changelog -o CHANGELOG.md
