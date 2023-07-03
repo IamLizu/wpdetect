@@ -54,18 +54,18 @@ http://www.techcrunch.com/
 
 Please note that, it is not always possible to detect the presence of WordPress, website admins can take extra measures to remove sign of WordPress.
 
-## Code of Conduct
+## Contributing
 
-Please see the [code of conduct](CODE_OF_CONDUCT.md).
+Initially conceived as an experimental venture for exploring PyPi publication, the `wpdetect` project has flourished, thanks to the invaluable contributions from numerous dedicated individuals. Regarded as an indispensable tool by penetration testers during reconnaissance, any form of engagement, including sharing the project with your team, is highly appreciated. For further details, kindly see the [Contributing Guide](https://github.com/IamLizu/wpdetect/blob/master/CONTRIBUTING.md).
+
+### Code of Conduct
+
+The `wpdetect` project upholds a comprehensive and universally accepted [Code of Conduct](https://github.com/IamLizu/wpdetect/blob/master/CODE_OF_CONDUCT.md), which guides the behavior of all participants involved. This set of guidelines delineates appropriate conduct and outlines the consequences that may ensue should any violations occur.
+
+### Changelog
+
+The project's [changelog](https://github.com/IamLizu/wpdetect/blob/master/CHANGELOG.md) provides a concise and chronological record of modifications made to `wpdetect`. It serves as a vital resource for users, showcasing the evolution of the project, including bug fixes, feature enhancements, and other noteworthy updates.
 
 ## Security
 
-Please see the [security policy](SECURITY.md).
-
-## Contributing
-
-Please see the [contributing guide](CONTRIBUTING.md).
-
-## Changelog
-
-Please see the [changelog](CHANGELOG.md).
+The project's [security policy](https://github.com/IamLizu/wpdetect/blob/master/SECURITY.md) ensures the integrity and confidentiality of `wpdetect`. It outlines robust measures to identify, prevent, and respond to security vulnerabilities and incidents. Regular security assessments and prompt resolution of reported issues are essential components of this policy.
