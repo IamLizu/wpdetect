@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# This script is used to tag a release of the package.
+
 echo "Running release-tag.sh"
 
 # Ensure we're on the master branch
