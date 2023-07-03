@@ -6,12 +6,12 @@ description: A simple script to detect if a website is running WordPress.
 import sys
 import urllib.request
 from urllib.parse import urlparse
-import toml
 import click
 from pyfiglet import figlet_format
 
 HEADER = "'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14" + \
     " (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'"
+VERSION = "1.4.8"
 
 # Error messages
 ERROR_UNABLE_TO_OPEN_URL = "Couldn't open url," + \
@@ -32,11 +32,7 @@ cli_options = {
 def get_package_version():
     """Returns the version of the package."""
 
-    # using absolute path to open the file because of the issue: #31
-    with open('pyproject.toml', 'r', encoding="utf-8") as pyproject_toml_file:
-        config = toml.load(pyproject_toml_file)
-
-    return config['project']['version']
+    return VERSION
 
 
 def print_verbose(message):
