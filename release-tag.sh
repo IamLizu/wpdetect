@@ -18,6 +18,11 @@ fi
 # Run the version bumping script
 new_version=$($python_executable utils/bump_version.py)
 
+# Commit the updated version
+echo "Committing version $new_version"
+git add pyproject.toml
+git commit -S -m "release $new_version"
+
 
 # Tag the release
 echo "Tagging version $new_version"
@@ -27,12 +32,10 @@ git tag -s "$new_version" -m "release $new_version"
 echo "Generating changelog"
 git-changelog -o CHANGELOG.md
 
-
-# Commit the updated version & changelog
-echo "Committing version $new_version & changelog"
-git add pyproject.toml
+# Commit (ammend) the changelog
+echo "Committing changelog"
 git add CHANGELOG.md
-git commit -S -m "release $new_version"
+git commit --amend --no-edit
 
 
 # Push the commit and tag
