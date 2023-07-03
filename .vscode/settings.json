@@ -1,8 +1,8 @@
 {
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8",
-        "editor.formatOnSave": true,
+        "editor.formatOnSave": true
     },
     "python.formatting.provider": "autopep8",
-    "cSpell.words": ["figlet", "KHTML", "pyfiglet"]
+    "cSpell.words": ["figlet", "KHTML", "pyfiglet", "wpdetect"]
 }
