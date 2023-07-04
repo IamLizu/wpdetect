@@ -18,7 +18,7 @@ fi
 
 
 # Run the version bumping script
-new_version=$($python_executable utils/bump_version.py)
+new_version=$($python_executable bump_version.py)
 
 # Commit the updated version
 echo "Committing version $new_version"

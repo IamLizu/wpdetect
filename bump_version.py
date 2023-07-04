@@ -39,8 +39,8 @@ def increment_version():
     # Update the version in pyproject.toml
     write_changes_to_file(file_path, 'version', new_version)
 
-    # Update the version in wpdetect/__main__.py
-    write_changes_to_file('wpdetect/__main__.py', 'VERSION', new_version)
+    # Update the version in wpdetect/constants.py
+    write_changes_to_file('wpdetect/constants.py', 'VERSION', new_version)
 
     return new_version
 
