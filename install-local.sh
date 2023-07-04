@@ -10,6 +10,8 @@ if [ -z "$python_executable" ]; then
     python_executable=$(which python3)
 fi
 
+rm -rf dist 
+
 $python_executable -m pip install --upgrade build
 $python_executable -m build
 
