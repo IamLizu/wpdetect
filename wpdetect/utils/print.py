@@ -24,6 +24,10 @@ def print_logo(version):
         Prints the logo with version number.
     """
 
-    print_verbose(figlet_format('     wpdetect     '))
-    print_verbose("=================== VERSION: " +
-                  version + " ===================\n")
+    if len(version) == 0:
+        raise ValueError(
+            "Invalid version number. Please provide a valid version.")
+
+    print(figlet_format('     wpdetect     '))
+    print("=================== VERSION: " +
+          version + " ===================\n")
