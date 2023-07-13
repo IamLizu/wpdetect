@@ -127,6 +127,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+wpdetect-test-env/
 
 # Spyder project settings
 .spyderproject
