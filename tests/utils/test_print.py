@@ -4,6 +4,7 @@
 
 import sys
 import unittest
+from unittest.mock import patch
 from io import StringIO
 from pyfiglet import figlet_format
 from wpdetect.utils.print import (
@@ -97,24 +98,41 @@ class TestPrintMethods(unittest.TestCase):
         self.assertEqual(str(context.exception), expected_output)
         self.assertEqual(printed_output, "")
 
-    def test_print_verbose_with_message(self):
+    def test_print_verbose_with_message_and_verbose_enabled(self):
         """
-        Test print_verbose method with a message
+        Test print_verbose method with a message while verbose is enabled
         """
+        with patch('wpdetect.utils.print.cli_options', {'verbose': True}):
+            message = "Test message"
+            expected_output = message + "\n"
 
-        message = "Test message"
-        expected_output = message + "\n"
+            captured_output = StringIO()
+            sys.stdout = captured_output
 
-        captured_output = StringIO()
-        sys.stdout = captured_output
+            print_verbose(message)
 
-        print_verbose(message)
+            sys.stdout = sys.__stdout__
 
-        sys.stdout = sys.__stdout__
+            printed_output = captured_output.getvalue()
+            self.assertEqual(printed_output, expected_output)
 
-        printed_output = captured_output.getvalue()
+    def test_print_verbose_with_message_and_verbose_disabled(self):
+        """
+        Test print_verbose method with a message while verbose is disabled
+        """
+        with patch('wpdetect.utils.print.cli_options', {'verbose': False}):
+            message = "Test message"
+            expected_output = ""
 
-        self.assertEqual(printed_output, expected_output)
+            captured_output = StringIO()
+            sys.stdout = captured_output
+
+            print_verbose(message)
+
+            sys.stdout = sys.__stdout__
+
+            printed_output = captured_output.getvalue()
+            self.assertEqual(printed_output, expected_output)
 
     def test_print_verbose_without_message(self):
         """
