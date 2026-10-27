@@ -1,5 +1,8 @@
 """Tests for WordPress URL and target-file scanning helpers."""
 
+# The descriptive test names serve as documentation for these cases.
+# pylint: disable=missing-function-docstring
+
 from io import StringIO
 from urllib.error import HTTPError, URLError
 from unittest.mock import MagicMock, Mock, call
@@ -94,7 +97,7 @@ def test_handle_url_reports_not_found_and_stops_after_first_signature(monkeypatc
     wp.handle_url("https://example.test")
 
     is_wp.assert_called_once_with("https://example.test/wp-login.php")
-    assert wp.detected_domains == []
+    assert not wp.detected_domains
     assert "WordPress not found at: https://example.test" in capsys.readouterr().out
 
 

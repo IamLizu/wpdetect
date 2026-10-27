@@ -1,5 +1,8 @@
 """Tests for URL and print utilities."""
 
+# The descriptive test names serve as documentation for these cases.
+# pylint: disable=missing-function-docstring
+
 from types import SimpleNamespace
 from unittest.mock import Mock, call
 

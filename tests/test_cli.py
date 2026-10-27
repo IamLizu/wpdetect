@@ -1,5 +1,8 @@
 """Tests for the Click command-line entry point."""
 
+# The descriptive test names serve as documentation for these cases.
+# pylint: disable=missing-function-docstring
+
 import sys
 import runpy
 from unittest.mock import patch

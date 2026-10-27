@@ -19,7 +19,8 @@ from wpdetect.constants import VERSION
 @click.option('-q', '--quiet', is_flag=True, help="Only print the detected domains.")
 @click.option('-sf', '--scan-full', is_flag=True,
               help="Scan HTTP & HTTPS of the website for WordPress.")
-def main(*, url=None, file=None, version=None, show_signature=None, quiet=None, scan_full=None):
+# Click maps each command-line option to a callback parameter.
+def main(*, url=None, file=None, version=None, show_signature=None, quiet=None, scan_full=None):  # pylint: disable=too-many-arguments
     """Detects if a website is running WordPress."""
 
     if quiet:
